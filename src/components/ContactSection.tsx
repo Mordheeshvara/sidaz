@@ -15,6 +15,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import GoogleMap from "@/components/GoogleMap";
 
 type ContactFormData = {
   name: string;
@@ -24,6 +25,7 @@ type ContactFormData = {
 };
 
 type ContactSectionProps = {
+  id?: string;
   className?: string;
   map?: {
     lat: number;
@@ -35,13 +37,14 @@ type ContactSectionProps = {
 };
 
 const defaultMap = {
-  lat: 37.7749,
-  lng: -122.4194,
-  label: "Studio",
-  zoom: 12,
+  lat: 11.9416,
+  lng: 79.8083,
+  label: "SIDAZ - Villianur, Pondicherry",
+  zoom: 15,
 };
 
 export default function ContactSection({
+  id,
   className,
   map = defaultMap,
   onSubmitAction,
@@ -126,6 +129,7 @@ export default function ContactSection({
 
   return (
     <section
+      id={id}
       className={cn(
         "w-full max-w-full",
         className
@@ -373,37 +377,11 @@ export default function ContactSection({
                   "bg-secondary"
                 )}
               >
-                <iframe
-                  title="Office location"
-                  src={mapSrc}
-                  loading="lazy"
+                <GoogleMap 
                   className="absolute inset-0 h-full w-full"
-                  referrerPolicy="no-referrer-when-downgrade"
+                  height="100%"
+                  width="100%"
                 />
-                {/* Darken overlay to match dark theme */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-black/40 mix-blend-multiply"
-                />
-                {/* Soft vignette */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(80% 60% at 50% 50%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%)",
-                  }}
-                />
-                {/* Custom purple pin centered */}
-                <div
-                  className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full"
-                  aria-hidden="true"
-                >
-                  <div className="relative">
-                    <MapPin className="h-8 w-8 text-primary drop-shadow-[0_6px_18px_rgba(155,140,255,0.7)]" />
-                    <div className="absolute left-1/2 top-full -translate-x-1/2 -translate-y-1/3 h-1.5 w-6 rounded-full bg-primary/50 blur-[2px]" />
-                  </div>
-                </div>
 
                 {/* Location badge */}
                 <div className="absolute left-3 top-3 flex min-w-0 items-center gap-2 rounded-full border bg-card/80 px-3 py-1.5 text-xs text-foreground backdrop-blur-md">
@@ -415,7 +393,7 @@ export default function ContactSection({
 
                 {/* Action hint */}
                 <div className="absolute right-3 bottom-3 rounded-full border bg-card/80 px-2.5 py-1 text-[11px] text-muted-foreground backdrop-blur-md">
-                  Drag to explore
+                  Click marker for info
                 </div>
               </div>
 

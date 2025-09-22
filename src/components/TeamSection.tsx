@@ -41,7 +41,7 @@ interface TeamSectionProps {
 }
 
 const defaultMembers: TeamMember[] = [
-  // Ordered: CEO, CTO, CFO, CMO, CBD, COO
+  // Ordered: CEO, CFO, CTO, CMO, CBD, COO
   {
     id: "1",
     name: "Sushmidha",
@@ -61,6 +61,24 @@ const defaultMembers: TeamMember[] = [
     },
   },
   {
+    id: "6",
+    name: "Sarathy",
+    role: "Chief Financial Officer(CFO)",
+    bio: "Translates fiscal discipline into sustainable company growth.",
+    expandedDescription: "Sarathy oversees SIDAZ's financial strategy and operations with meticulous attention to fiscal responsibility and growth optimization. His analytical approach to financial planning and risk management has strengthened the company's economic foundation. He ensures sustainable financial practices while supporting strategic investments that fuel long-term business expansion.",
+    contact: {
+      email: "sarathykgf5@gmail.com",
+      linkedin: "https://www.linkedin.com/in/sarathy",
+      instagram: "https://www.instagram.com/parama_from_petit/?hl=en"
+    },
+    imageUrl: "/images/team/sara2.jpeg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/sarathy",
+      instagram: "https://www.instagram.com/parama_from_petit/?hl=en",
+      email: "sarathykgf5@gmail.com",
+    },
+  },
+  {
     id: "5",
     name: "Arjun",
     role: "Chief Technology Officer(CTO)",
@@ -76,24 +94,6 @@ const defaultMembers: TeamMember[] = [
       linkedin: "https://www.linkedin.com/in/arjun19",
       instagram: "https://www.instagram.com/arj._.uun/?hl=en",
       email: "arjunfree256@gmail.com",
-    },
-  },
-  {
-    id: "6",
-    name: "Sarathy",
-    role: "Chief Financial Officer(CFO)",
-    bio: "Translates fiscal discipline into sustainable company growth.",
-    expandedDescription: "Sarathy oversees SIDAZ's financial strategy and operations with meticulous attention to fiscal responsibility and growth optimization. His analytical approach to financial planning and risk management has strengthened the company's economic foundation. He ensures sustainable financial practices while supporting strategic investments that fuel long-term business expansion.",
-    contact: {
-      email: "sarathykgf5@gmail.com",
-      linkedin: "https://www.linkedin.com/in/sarathy",
-      instagram: "https://www.instagram.com/parama_from_petit/?hl=en"
-    },
-    imageUrl: "/images/team/sara.png",
-    links: {
-      linkedin: "https://www.linkedin.com/in/sarathy",
-      instagram: "https://www.instagram.com/parama_from_petit/?hl=en",
-      email: "sarathykgf5@gmail.com",
     },
   },
   {
