@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Menu, ChevronRight } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { Menu, X, ChevronRight } from "lucide-react";
+import clsx from "clsx";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import Image from "next/image";
 
@@ -186,7 +188,6 @@ export default function Navigation({
 
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [links, scrollOffset]);
 
   const handleScrollTo = useCallback(
@@ -255,7 +256,7 @@ export default function Navigation({
       <div className="container w-full max-w-full">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left: Logo */}
-          <a
+          <Link
             href="/"
             className="group flex items-center gap-2 sm:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 rounded-lg p-1 -m-1 min-w-0 flex-shrink-0"
             aria-label="Go to homepage"
@@ -269,7 +270,7 @@ export default function Navigation({
                 Design & Engineering
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1 min-w-0 flex-1 justify-center max-w-2xl mx-8">

@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React from 'react';
+import Link from 'next/link';
 import { Linkedin, Contact, Layers2, Columns4, Instagram, Facebook } from "lucide-react";
 import clsx from "clsx";
 
@@ -251,30 +252,30 @@ const Footer: React.FC<FooterProps> = ({
 
           <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
             <li>
-              <a
+              <Link
                 href="/#privacy"
                 className="text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--ring] rounded-sm"
               >
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li className="text-muted-foreground">•</li>
             <li>
-              <a
+              <Link
                 href="/#terms"
                 className="text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--ring] rounded-sm"
               >
                 Terms of Service
-              </a>
+              </Link>
             </li>
             <li className="text-muted-foreground">•</li>
             <li>
-              <a
+              <Link
                 href="/#contact"
                 className="text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--ring] rounded-sm"
               >
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
