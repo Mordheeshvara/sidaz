@@ -409,16 +409,16 @@ export default function ContactSection({
                 {" "}or call us at{" "}
                 <a
                   className="underline decoration-primary/40 underline-offset-4 hover:text-foreground"
-                  href="tel:+919687459756"
+                  href="tel:+919514332052"
                 >
-                  +91 9687459756
+                  +91 9514332052
                 </a>
                 {" "}or{" "}
                 <a
                   className="underline decoration-primary/40 underline-offset-4 hover:text-foreground"
-                  href="tel:+916784589345"
+                  href="tel:+917397515675"
                 >
-                  +91 6784589345
+                  +91 7397515675
                 </a>
               </div>
             </div>
