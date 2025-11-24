@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Sarathy",
+    "title": "Chief Executive Officer",
+    "description": "A visionary leader with over a decade of experience in transforming startups into industry leaders, Sarathy brings strategic excellence to every aspect of SIDAZ's operations. With a proven track record of scaling businesses across multiple verticals, he specializes in identifying market opportunities, building high-performance teams, and executing growth strategies that deliver measurable results. His leadership philosophy centers on innovation, sustainability, and creating value for both clients and stakeholders. Under his guidance, SIDAZ has evolved into a trusted partner for businesses seeking digital transformation and market expansion.",
+    "contact": {
+      "linkedin": "https://www.linkedin.com/in/sarathy",
+      "instagram": "https://www.instagram.com/parama_from_petit/?hl=en",
+  "email": "thesidasolutions@gmail.com",
+      "phone": "+91 9687459756"
+    }
+  },
+  {
+    "name": "Mordheesh",
+    "title": "Chief Marketing Officer",
+    "description": "A creative strategist with expertise in brand development and digital marketing, Mordheesh transforms complex business solutions into compelling narratives that resonate with target audiences. His comprehensive approach to marketing encompasses everything from brand positioning and content strategy to digital campaigns and customer experience optimization. With deep insights into consumer behavior and market trends, he crafts campaigns that not only drive engagement but also build lasting brand loyalty. His innovative marketing strategies have helped numerous businesses establish strong market presence and achieve sustainable growth in competitive landscapes.",
+    "contact": {
+      "linkedin": "https://www.linkedin.com/in/mordheeshvara/",
+      "instagram": "https://www.instagram.com/mordheesh/?next=%2F&hl=en",
+  "email": "thesidasolutions@gmail.com",
+      "phone": "+91 6784589345"
+    }
+  },
+  {
+    "name": "Ravikanth",
+    "title": "Chief Blockchain Developer",
+    "description": "A blockchain architect and security expert who specializes in building robust, scalable decentralized solutions for enterprise applications. Ravikanth's technical expertise spans across multiple blockchain platforms, smart contract development, and cryptocurrency integration. His deep understanding of cryptographic principles and distributed systems enables him to design secure protocols that protect user data while maintaining optimal performance. He stays at the forefront of blockchain innovation, continuously exploring new technologies and methodologies to deliver cutting-edge solutions that meet the evolving needs of modern businesses in the digital economy.",
+    "contact": {
+      "linkedin": "https://www.linkedin.com/in/ravikanth-s",
+      "instagram": "https://www.instagram.com/__its__r____k___/?hl=en",
+      "github": "https://github.com/ravikanth-sidaz",
+  "email": "thesidasolutions@gmail.com",
+      "phone": "+91 9687459756"
+    }
+  },
+  {
+    "name": "Pratheeb",
+    "title": "Junior Java Developer",
+    "description": "An emerging talent in software development with a strong foundation in Java programming and enterprise application development. Pratheeb combines technical precision with creative problem-solving to deliver clean, efficient code that meets modern software standards. His expertise includes object-oriented programming, database integration, and API development, making him a valuable contributor to complex software projects. With a passion for continuous learning and staying updated with the latest development frameworks, he brings fresh perspectives and innovative approaches to development challenges while maintaining focus on code quality and performance optimization.",
+    "contact": {
+      "linkedin": "https://www.linkedin.com/in/pratheeb",
+      "instagram": "https://www.instagram.com/_pratheeb_012_/?hl=en",
+      "github": "https://github.com/pratheeb-sidaz",
+  "email": "thesidasolutions@gmail.com",
+      "phone": "+91 6784589345"
+    }
+  }
+]
