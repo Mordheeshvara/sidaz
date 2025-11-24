@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { Users, Linkedin, Instagram, Mail, ChevronLeft, ChevronRight, BadgeCheck } from "lucide-react";
 import {
   Dialog,
@@ -337,11 +338,15 @@ export default function TeamSection({
                 <div className="px-6 pb-10 pt-10 text-center relative z-10 flex flex-col items-center h-full">
                   {/* Avatar with Ring */}
                   <div className="relative mb-8">
-                    <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary/50 transition-colors duration-500 shadow-xl">
-                      <img
+                    <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary/50 transition-colors duration-500 shadow-xl bg-zinc-900 relative">
+                      <Image
                         src={m.imageUrl}
                         alt={m.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 640px) 128px, 144px"
+                        className="object-cover object-center"
+                        quality={100}
+                        priority={isCenter}
                       />
                     </div>
                     {/* Verified Badge */}
@@ -492,10 +497,13 @@ export default function TeamSection({
                 <div className="flex items-center gap-6">
                   {/* Member Photo */}
                   <div className="relative w-20 h-20 rounded-full overflow-hidden bg-zinc-800/50 border-2 border-primary/30 shadow-lg">
-                    <img
+                    <Image
                       src={selectedMember.imageUrl}
                       alt={`${selectedMember.name} photo`}
-                      className="w-full h-full object-cover object-top"
+                      fill
+                      sizes="80px"
+                      className="object-cover object-center"
+                      quality={100}
                     />
                     <div className="absolute inset-0 rounded-full ring-2 ring-white/20 group-hover:ring-primary/30 transition-all duration-300" />
                   </div>

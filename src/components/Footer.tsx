@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Linkedin, Contact, Layers2, Columns4, Instagram, Facebook } from "lucide-react";
+import { Linkedin, Contact, Layers2, Columns4, Instagram, Mail } from "lucide-react";
 import clsx from "clsx";
 
 type FooterLink = {
@@ -220,11 +220,11 @@ const Footer: React.FC<FooterProps> = ({
                   <Instagram className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 </a>
                 <a
-                  href="https://facebook.com/sidaz"
+                  href="mailto:sidaztechnologies@gmail.com"
                   className="p-3 rounded-lg bg-muted/20 hover:bg-primary/20 transition-all duration-200 group"
-                  aria-label="Follow us on Facebook"
+                  aria-label="Send us an email"
                 >
-                  <Facebook className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <Mail className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 </a>
               </div>
             </div>

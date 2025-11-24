@@ -2,6 +2,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Lightbulb, Target } from "lucide-react";
 
@@ -178,7 +179,7 @@ export default function AboutSection({
               <div className="relative h-32 w-32 sm:h-44 sm:w-44 md:h-56 md:w-56 lg:h-48 lg:w-48 xl:h-64 xl:w-64">
                 {/* Animated Glow Ring */}
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(155,140,255,0.45),rgba(155,140,255,0.12)_60%,transparent_70%)] blur-[1px]"
+                  className="absolute inset-0 rounded-full bg-[radial-gradient(closest-side,rgba(155,140,255,0.45),rgba(155,140,255,0.12)_60%,transparent_70%)] blur-[1px] z-0"
                   animate={{
                     scale: [1, 1.05, 1],
                     opacity: [0.6, 0.8, 0.6]
@@ -191,29 +192,35 @@ export default function AboutSection({
                 />
 
                 {/* Rotating Gradient Border */}
-                <div className="absolute inset-0 animate-[spin_14s_linear_infinite] rounded-full bg-[conic-gradient(from_0deg,rgba(155,140,255,0.8),transparent_40%,rgba(155,140,255,0.9),transparent_80%,rgba(155,140,255,0.8))]" />
+                <div className="absolute inset-0 animate-[spin_14s_linear_infinite] rounded-full bg-[conic-gradient(from_0deg,rgba(155,140,255,0.8),transparent_40%,rgba(155,140,255,0.9),transparent_80%,rgba(155,140,255,0.8))] z-[1]" />
 
                 {/* Inner Border */}
-                <div className="absolute inset-2 sm:inset-3 rounded-full border-2 border-primary/60 shadow-[0_0_30px_rgba(155,140,255,0.4)_inset]" />
+                <div className="absolute inset-2 sm:inset-3 rounded-full border-2 border-primary/60 shadow-[0_0_30px_rgba(155,140,255,0.4)_inset] z-[2]" />
 
-                {/* Founder Image */}
+                {/* BACKGROUND BOX - Behind Image */}
+                <div className="absolute inset-3 sm:inset-4 rounded-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 z-[3]" />
+
+                {/* Founder Image - Forward Layer */}
                 <motion.div
-                  className="absolute inset-3 sm:inset-4 rounded-full overflow-hidden border-2 border-primary/30"
+                  className="absolute inset-3 sm:inset-4 rounded-full overflow-hidden border-2 border-primary/30 z-[10]"
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.6 }}
                 >
-                  <img
+                  <Image
                     src="/images/founder-sara.png"
                     alt="Founder - Sarathy"
-                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 640px) 128px, (max-width: 768px) 176px, (max-width: 1024px) 192px, 256px"
+                    className="object-cover object-center transition-transform duration-500 group-hover:scale-110 relative z-[11]"
+                    quality={100}
                   />
                   {/* Image Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[12]" />
                 </motion.div>
 
                 {/* Outer Glow */}
-                <div className="absolute inset-0 scale-110 rounded-full bg-[radial-gradient(closest-side,transparent,transparent,rgba(107,110,249,0.25))] mix-blend-screen" />
+                <div className="absolute inset-0 scale-110 rounded-full bg-[radial-gradient(closest-side,transparent,transparent,rgba(107,110,249,0.25))] mix-blend-screen z-[13]" />
               </div>
             </div>
 
