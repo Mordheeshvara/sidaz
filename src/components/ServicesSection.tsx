@@ -1,232 +1,244 @@
 "use client"
 
 import * as React from "react"
+import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue } from "framer-motion"
 import {
-  LayoutGrid,
   Smartphone,
   Cloud,
   BrainCircuit,
-  Code2,
-  Rocket,
   ShieldCheck,
   Palette,
-  type LucideIcon,
-  CheckCircle2,
-  Cpu,
   Globe,
+  ArrowUpRight,
+  Code2,
+  Cpu,
+  Zap,
   Layers
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
 
-export type ServiceItem = {
+// --- Types ---
+type ServiceItem = {
   id: string
   title: string
   description: string
-  icon: LucideIcon
-  technologies: string[]
-  features: string[]
+  icon: React.ElementType
+  colSpan: number // 1, 2, or 3 for bento grid
   gradient: string
+  tags: string[]
 }
 
-export type ServicesSectionProps = {
-  className?: string
-  title?: string
-  subtitle?: string
-  services?: ServiceItem[]
-}
-
-const defaultServices: ServiceItem[] = [
+const services: ServiceItem[] = [
   {
-    id: "web-solutions",
-    title: "Enterprise Web Solutions",
-    description:
-      "Scalable, high-performance web applications engineered for complex business needs. We build robust digital platforms that drive growth.",
+    id: "web",
+    title: "Web Engineering",
+    description: "Scalable, high-performance web platforms built with Next.js and React. We architect solutions that handle millions of users with sub-second latency.",
     icon: Globe,
-    technologies: ["React", "Next.js", "Node.js", "TypeScript"],
-    features: ["Microservices Architecture", "Progressive Web Apps (PWA)", "SEO Optimization", "High Availability"],
-    gradient: "from-blue-500/20 to-cyan-500/20",
+    colSpan: 2,
+    gradient: "from-violet-600/20 to-indigo-600/20",
+    tags: ["Next.js", "React", "Node.js", "WebGL"]
   },
   {
-    id: "mobile-engineering",
-    title: "Mobile Engineering",
-    description:
-      "Native-quality cross-platform mobile experiences. We deliver fluid, offline-first applications that users love.",
+    id: "mobile",
+    title: "Mobile Apps",
+    description: "Native-quality cross-platform experiences. Fluid animations, offline-first architecture, and biometric security.",
     icon: Smartphone,
-    technologies: ["Flutter", "React Native", "iOS", "Android"],
-    features: ["Offline-first Architecture", "Real-time Sync", "Native Performance", "Biometric Security"],
-    gradient: "from-emerald-500/20 to-teal-500/20",
+    colSpan: 1,
+    gradient: "from-fuchsia-600/20 to-pink-600/20",
+    tags: ["Flutter", "React Native", "iOS"]
   },
   {
-    id: "cloud-architecture",
-    title: "Cloud Architecture",
-    description:
-      "Secure, scalable cloud infrastructure designed for reliability. We optimize your deployment for speed, cost, and uptime.",
-    icon: Cloud,
-    technologies: ["AWS", "Azure", "Docker", "Kubernetes"],
-    features: ["Serverless Computing", "CI/CD Pipelines", "Auto-scaling", "Cost Optimization"],
-    gradient: "from-orange-500/20 to-red-500/20",
-  },
-  {
-    id: "ai-systems",
-    title: "AI & Intelligent Systems",
-    description:
-      "Next-generation applications powered by applied AI. We integrate machine learning to automate workflows and unlock insights.",
+    id: "ai",
+    title: "AI & ML Systems",
+    description: "Custom AI models, NLP pipelines, and computer vision integration. We turn data into actionable intelligence.",
     icon: BrainCircuit,
-    technologies: ["Python", "TensorFlow", "OpenAI", "LangChain"],
-    features: ["Predictive Analytics", "Natural Language Processing", "Computer Vision", "Automated Agents"],
-    gradient: "from-purple-500/20 to-pink-500/20",
+    colSpan: 1,
+    gradient: "from-cyan-600/20 to-blue-600/20",
+    tags: ["Python", "TensorFlow", "LLMs"]
+  },
+  {
+    id: "cloud",
+    title: "Cloud Infrastructure",
+    description: "Serverless architectures, Kubernetes orchestration, and automated CI/CD pipelines for zero-downtime deployments.",
+    icon: Cloud,
+    colSpan: 2,
+    gradient: "from-emerald-600/20 to-teal-600/20",
+    tags: ["AWS", "Azure", "Docker", "K8s"]
   },
   {
     id: "blockchain",
     title: "Blockchain Solutions",
-    description:
-      "Decentralized applications and smart contracts for the Web3 era. We build secure, transparent, and immutable systems.",
+    description: "Smart contracts and dApps.",
     icon: ShieldCheck,
-    technologies: ["Solidity", "Web3.js", "Ethereum", "Smart Contracts"],
-    features: ["DeFi Protocols", "NFT Marketplaces", "Tokenomics", "Security Audits"],
-    gradient: "from-indigo-500/20 to-violet-500/20",
+    colSpan: 1,
+    gradient: "from-orange-600/20 to-red-600/20",
+    tags: ["Solidity", "Ethereum"]
   },
   {
-    id: "product-design",
-    title: "Product Design & Strategy",
-    description:
-      "User-centric design that bridges business goals with user needs. We craft intuitive interfaces that delight and convert.",
+    id: "design",
+    title: "Product Design",
+    description: "UI/UX that converts.",
     icon: Palette,
-    technologies: ["Figma", "Motion", "User Research", "Prototyping"],
-    features: ["Design Systems", "User Journey Mapping", "Interactive Prototypes", "Accessibility (a11y)"],
-    gradient: "from-rose-500/20 to-orange-500/20",
+    colSpan: 1,
+    gradient: "from-rose-600/20 to-purple-600/20",
+    tags: ["Figma", "Motion"]
   },
+  {
+    id: "consulting",
+    title: "Tech Strategy",
+    description: "Digital transformation roadmaps.",
+    icon: Layers,
+    colSpan: 1,
+    gradient: "from-amber-600/20 to-yellow-600/20",
+    tags: ["Agile", "Architecture"]
+  }
 ]
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
+// --- Components ---
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.0, 0.0, 0.2, 1.0] as const,
-    },
-  },
-}
+function Card({ service, index }: { service: ServiceItem; index: number }) {
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
 
-export default function ServicesSection({
-  className,
-  title = "Our Expertise",
-  subtitle = "We deliver end-to-end software solutions, combining engineering excellence with design thinking to solve complex business challenges.",
-  services = defaultServices,
-}: ServicesSectionProps) {
+  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect()
+    mouseX.set(clientX - left)
+    mouseY.set(clientY - top)
+  }
+
   return (
-    <section
-      aria-labelledby="services-heading"
-      className={cn("w-full max-w-full py-24 relative overflow-hidden", className)}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      onMouseMove={handleMouseMove}
+      className={cn(
+        "group relative rounded-3xl border border-white/10 bg-zinc-900/50 overflow-hidden hover:border-white/20 transition-colors duration-500",
+        service.colSpan === 2 ? "md:col-span-2" : "md:col-span-1"
+      )}
     >
+      {/* Spotlight Effect */}
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
+        style={{
+          background: useMotionTemplate`
+            radial-gradient(
+              650px circle at ${mouseX}px ${mouseY}px,
+              rgba(255,255,255,0.1),
+              transparent 80%
+            )
+          `,
+        }}
+      />
+
+      {/* Gradient Background */}
+      <div className={cn(
+        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br",
+        service.gradient
+      )} />
+
+      <div className="relative h-full p-8 flex flex-col">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <service.icon className="w-6 h-6 text-zinc-400 group-hover:text-white transition-colors" />
+          </div>
+          <ArrowUpRight className="w-6 h-6 text-zinc-600 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+        </div>
+
+        {/* Content */}
+        <div className="mt-auto">
+          <h3 className="text-2xl font-bold text-white mb-3 group-hover:translate-x-1 transition-transform duration-300">
+            {service.title}
+          </h3>
+          <p className="text-zinc-400 leading-relaxed mb-6 group-hover:text-zinc-200 transition-colors duration-300">
+            {service.description}
+          </p>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2">
+            {service.tags.map((tag) => (
+              <span
+                key={tag}
+                className="px-3 py-1 text-xs font-medium text-zinc-500 bg-zinc-900/50 border border-zinc-800 rounded-full group-hover:text-white group-hover:border-white/20 transition-colors duration-300"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+export default function ServicesSection({ className }: { className?: string }) {
+  const containerRef = React.useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  })
+
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100])
+
+  return (
+    <section ref={containerRef} className={cn("relative py-32 overflow-hidden", className)}>
       {/* Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      <div className="absolute inset-0 pointer-events-none">
+        <motion.div
+          style={{ y }}
+          className="absolute top-0 right-0 w-[800px] h-[800px] bg-violet-500/5 rounded-full blur-[120px]"
+        />
+        <motion.div
+          style={{ y: useTransform(scrollYProgress, [0, 1], [-100, 100]) }}
+          className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-fuchsia-500/5 rounded-full blur-[100px]"
+        />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-20 text-center max-w-3xl mx-auto"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6">
-            <Cpu className="w-4 h-4" />
-            <span>Engineering Services</span>
-          </div>
-          <h2
-            id="services-heading"
-            className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60"
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Section Header */}
+        <div className="max-w-3xl mx-auto text-center mb-24">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm font-medium mb-6 backdrop-blur-sm"
           >
-            {title}
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            {subtitle}
-          </p>
-        </motion.div>
+            <Cpu className="w-4 h-4" />
+            <span>Our Expertise</span>
+          </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {services.map((svc) => {
-            const Icon = svc.icon
-            return (
-              <motion.article
-                key={svc.id}
-                variants={itemVariants}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                className="group relative h-full bg-[#0a0a0a] border border-white/10 rounded-3xl overflow-hidden hover:border-primary/50 transition-colors duration-500 hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.15)]"
-              >
-                {/* Gradient Background on Hover */}
-                <div className={cn(
-                  "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br",
-                  svc.gradient
-                )} />
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight"
+          >
+            Engineering <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-white">
+              The Impossible
+            </span>
+          </motion.h2>
 
-                <div className="relative p-8 flex flex-col h-full">
-                  {/* Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/20 group-hover:border-primary/50 transition-all duration-500">
-                    <Icon className="w-7 h-7 text-white group-hover:text-primary transition-colors duration-300" />
-                  </div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-zinc-400 leading-relaxed"
+          >
+            We don't just write code; we architect digital ecosystems. From high-frequency trading platforms to AI-driven consumer apps, we build the technology that powers the future.
+          </motion.p>
+        </div>
 
-                  {/* Content */}
-                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-primary transition-colors duration-300">
-                    {svc.title}
-                  </h3>
-
-                  <p className="text-zinc-400 leading-relaxed mb-8 flex-grow">
-                    {svc.description}
-                  </p>
-
-                  {/* Tech Stack */}
-                  <div className="mb-8">
-                    <div className="flex flex-wrap gap-2">
-                      {svc.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-1 text-xs font-medium text-zinc-400 bg-white/5 border border-white/5 rounded-md group-hover:border-white/10 group-hover:text-zinc-300 transition-colors"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Features */}
-                  <div className="space-y-3 pt-6 border-t border-white/5 group-hover:border-white/10 transition-colors">
-                    {svc.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3 text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.article>
-            )
-          })}
-        </motion.div>
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {services.map((service, index) => (
+            <Card key={service.id} service={service} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   )

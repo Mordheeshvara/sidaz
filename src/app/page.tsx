@@ -2,42 +2,28 @@
 
 import HeroSection from "@/components/HeroSection";
 import Navigation from "@/components/Navigation";
+import ServicesSection from "@/components/ServicesSection";
+import AboutSection from "@/components/AboutSection";
+import PortfolioSection from "@/components/PortfolioSection";
+import TeamSection from "@/components/TeamSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
 export default function HomePage() {
   const handleGetStarted = () => {
-    console.log('Get Started button clicked!');
-
-    // Add a small delay to ensure DOM is ready
-    setTimeout(() => {
-      const contactSection = document.getElementById('contact');
-      console.log('Contact section found:', contactSection);
-
-      if (contactSection) {
-        // Get the position and scroll with offset for navigation
-        const elementPosition = contactSection.offsetTop;
-        const offsetPosition = elementPosition - 80; // Account for navigation height
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-        console.log('Scrolling to contact section at position:', offsetPosition);
-      } else {
-        console.error('Contact section not found!');
-        // Fallback: scroll to bottom of page
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      const elementPosition = contactSection.offsetTop;
+      const offsetPosition = elementPosition - 80;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const handleViewPortfolio = () => {
-    // Scroll to portfolio/projects section
-    const portfolioSection = document.getElementById('projects') || document.getElementById('portfolio');
+    const portfolioSection = document.getElementById('portfolio');
     if (portfolioSection) {
       portfolioSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -46,16 +32,42 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
+
+      {/* Hero Section */}
       <HeroSection
         id="hero"
         primaryHref="#contact"
-        secondaryHref={undefined}
+        secondaryHref="#portfolio"
         onPrimaryClick={undefined}
         onSecondaryClick={handleViewPortfolio}
       />
-      <div className="container mx-auto px-4 py-16">
-        <ContactSection id="contact" />
+
+      {/* About Section */}
+      <div id="about" className="scroll-mt-20">
+        <AboutSection />
       </div>
+
+      {/* Services Section */}
+      <div id="services" className="scroll-mt-20">
+        <ServicesSection />
+      </div>
+
+      {/* Portfolio Section */}
+      <div id="portfolio" className="scroll-mt-20">
+        <PortfolioSection />
+      </div>
+
+      {/* Team Section */}
+      <div id="team" className="scroll-mt-20">
+        <TeamSection />
+      </div>
+
+      {/* Contact Section */}
+      <div id="contact" className="scroll-mt-20">
+        <ContactSection />
+      </div>
+
+      {/* Footer */}
       <Footer />
     </main>
   );

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Code2 } from "lucide-react";
 
 export interface HeroSectionProps {
   id?: string;
@@ -42,7 +42,7 @@ export default function HeroSection({
       id={id}
       className={cn(
         "relative w-full min-h-[100svh] overflow-hidden",
-        "bg-[#030303]",
+        "bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950",
         "isolate",
         "flex items-center justify-center",
         className
@@ -51,148 +51,132 @@ export default function HeroSection({
     >
       {/* Animated Background Layers */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* Main Gradient Orb */}
+        {/* Animated Gradient Mesh */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/5 to-cyan-500/10 animate-gradient" />
+
+        {/* Floating Particles */}
         <motion.div
-          style={{ y: y1 }}
-          className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"
+          className="absolute top-[10%] left-[10%] w-64 h-64 bg-violet-500/20 rounded-full blur-3xl"
+          animate={{
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
         />
 
-        {/* Secondary Gradient Orb */}
         <motion.div
-          style={{ y: y2 }}
-          className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse"
+          animate={{
+            y: [0, 30, 0],
+            opacity: [0.2, 0.5, 0.2]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-fuchsia-500/10 rounded-full blur-[120px]"
         />
-
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
-
-        {/* Noise Texture */}
-        <div className="absolute inset-0 opacity-20 bg-[url('/noise.png')] mix-blend-overlay" />
       </div>
 
-      {/* Content */}
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        <motion.div
+      <div className="container relative z-10 px-4 mx-auto text-center">
+        {/* Badge */}
+
+
+        {/* Main Heading */}
+        <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.0, 0.0, 0.2, 1.0] as const }}
-          className="flex flex-col items-center text-center max-w-5xl"
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
+          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight mb-8 leading-[1.1]"
         >
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 hover:bg-white/10 transition-colors cursor-default"
+          We Build <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-300 to-violet-500 animate-gradient-x">
+            Digital Legacies
+          </span>
+        </motion.h1>
+
+        {/* Subheading */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
+          className="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed"
+        >
+          Transforming visionary ideas into world-class digital experiences.
+          Precision engineering meets American design aesthetics.
+        </motion.p>
+
+        {/* CTA Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20"
+        >
+          <button
+            onClick={() => {
+              const contactSection = document.getElementById('contact');
+              if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className="group relative px-8 py-4 rounded-full bg-violet-600 text-white font-semibold text-lg overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(124,58,237,0.3)] hover:shadow-[0_0_30px_rgba(124,58,237,0.5)]"
           >
-            <Sparkles className="w-4 h-4 text-yellow-400" />
-            <span className="text-sm font-medium text-zinc-200">Engineering Excellence</span>
-          </motion.div>
-
-          {/* Heading */}
-          <h1 className="font-heading font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white mb-8 leading-[1.1]">
-            Building the <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-blue-500 animate-gradient-x">
-              Future of Digital
+            <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-fuchsia-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative flex items-center gap-2">
+              Start Your Journey <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </span>
-          </h1>
+          </button>
 
-          {/* Subheading */}
-          <p className="max-w-2xl text-lg sm:text-xl text-zinc-400 leading-relaxed mb-12">
-            {subheading}
-          </p>
-
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <button
-              onClick={() => {
-                console.log('🚀 BUTTON CLICKED - Starting scroll process');
-
-                // Function to attempt scroll with retries
-                const attemptScroll = (retryCount = 0) => {
-                  const maxRetries = 5;
-
-                  // Try multiple selectors
-                  const selectors = ['#contact', '[id="contact"]', 'section[id="contact"]'];
-                  let element = null;
-
-                  for (const selector of selectors) {
-                    element = document.querySelector(selector);
-                    if (element) {
-                      console.log('✅ Found element with selector:', selector);
-                      break;
-                    }
-                  }
-
-                  if (element) {
-                    console.log('📍 Element found:', element);
-
-                    // Get element position
-                    const rect = element.getBoundingClientRect();
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const targetPosition = rect.top + scrollTop - 80; // 80px offset for nav
-
-                    console.log('📊 Scroll details:', {
-                      currentScroll: scrollTop,
-                      targetPosition: targetPosition,
-                      elementTop: rect.top
-                    });
-
-                    // Perform scroll
-                    window.scrollTo({
-                      top: targetPosition,
-                      behavior: 'smooth'
-                    });
-
-                    console.log('✨ Scroll initiated successfully!');
-                    return true;
-                  } else {
-                    console.warn(`⚠️ Element not found (attempt ${retryCount + 1}/${maxRetries})`);
-
-                    // Retry after delay
-                    if (retryCount < maxRetries) {
-                      setTimeout(() => {
-                        console.log(`🔄 Retrying... (${retryCount + 1}/${maxRetries})`);
-                        attemptScroll(retryCount + 1);
-                      }, 200);
-                    } else {
-                      console.error('❌ Failed to find contact section after all retries');
-                      alert('Contact section not found. Please scroll down manually.');
-                    }
-                    return false;
-                  }
-                };
-
-                // Start scroll attempt
-                attemptScroll();
-              }}
-              className="group inline-flex items-center justify-center w-full sm:w-auto h-14 px-8 text-lg font-bold rounded-full border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm transition-all duration-200 cursor-pointer"
-            >
-              {primaryLabel}
-              <ArrowRight className="ml-2 w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" />
-            </button>
-
-            {secondaryHref ? (
-              <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full border-white/20 text-white hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all" asChild>
-                <Link href={secondaryHref}>{secondaryLabel}</Link>
-              </Button>
-            ) : (
-              <Button size="lg" variant="outline" onClick={onSecondaryClick} className="w-full sm:w-auto h-14 px-8 text-lg rounded-full border-white/20 text-white hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all">
+          {secondaryHref ? (
+            <Link href={secondaryHref}>
+              <button className="group inline-flex items-center justify-center w-full sm:w-auto h-14 px-8 text-lg font-bold rounded-full border-2 border-violet-500/30 text-violet-300 hover:bg-violet-500/10 hover:border-violet-500/50 backdrop-blur-sm transition-all duration-300">
                 {secondaryLabel}
-              </Button>
-            )}
-          </div>
+                <Code2 className="ml-2 w-5 h-5 transition-transform duration-200 group-hover:rotate-12" />
+              </button>
+            </Link>
+          ) : (
+            <button
+              onClick={onSecondaryClick}
+              className="group inline-flex items-center justify-center w-full sm:w-auto h-14 px-8 text-lg font-bold rounded-full border-2 border-violet-500/30 text-violet-300 hover:bg-violet-500/10 hover:border-violet-500/50 backdrop-blur-sm transition-all duration-300"
+            >
+              {secondaryLabel}
+              <Code2 className="ml-2 w-5 h-5 transition-transform duration-200 group-hover:rotate-12" />
+            </button>
+          )}
         </motion.div>
+
+
       </div>
 
-      {/* Scroll Indicator - Hidden */}
-      {/* <motion.div
+      {/* Scroll Indicator */}
+      <motion.div
         style={{ opacity }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.6 }}
+        transition={{ delay: 1.5, duration: 0.8 }}
       >
-        <span className="text-xs text-zinc-500 uppercase tracking-widest">Scroll</span>
-        <div className="w-[1px] h-16 bg-gradient-to-b from-zinc-500 to-transparent" />
-      </motion.div> */}
-    </section>
+        <span className="text-xs text-violet-400 uppercase tracking-widest font-semibold">Scroll</span>
+        <motion.div
+          className="w-[2px] h-16 bg-gradient-to-b from-violet-500 to-transparent"
+          animate={{
+            scaleY: [1, 1.2, 1],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      </motion.div>
+    </section >
   );
 }
