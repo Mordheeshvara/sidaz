@@ -30,67 +30,67 @@ type ServiceItem = {
 
 const services: ServiceItem[] = [
   {
-    id: "web",
-    title: "Web Engineering",
-    description: "Scalable, high-performance web platforms built with Next.js and React. We architect solutions that handle millions of users with sub-second latency.",
-    icon: Globe,
+    id: "deep-ai",
+    title: "Deep AI Development",
+    description: "Advanced neural networks, custom LLMs, and predictive modeling. We build sophisticated AI systems that solve complex cognitive problems.",
+    icon: BrainCircuit,
     colSpan: 2,
     gradient: "from-violet-600/20 to-indigo-600/20",
-    tags: ["Next.js", "React", "Node.js", "WebGL"]
+    tags: ["LLMs", "Neural Networks", "NLP", "Computer Vision"]
+  },
+  {
+    id: "ai-tools",
+    title: "AI Tools Development",
+    description: "Custom AI-powered utilities and automation agents that streamline workflows and enhance productivity.",
+    icon: Zap,
+    colSpan: 1,
+    gradient: "from-fuchsia-600/20 to-pink-600/20",
+    tags: ["Automation", "Agents", "RAG"]
+  },
+  {
+    id: "saas",
+    title: "SaaS & Web Platforms",
+    description: "Scalable, multi-tenant SaaS architectures built for global scale. We engineer subscription-based platforms with enterprise-grade security.",
+    icon: Globe,
+    colSpan: 2,
+    gradient: "from-cyan-600/20 to-blue-600/20",
+    tags: ["Next.js", "Multi-tenant", "Stripe", "Auth0"]
   },
   {
     id: "mobile",
     title: "Mobile Apps",
-    description: "Native-quality cross-platform experiences. Fluid animations, offline-first architecture, and biometric security.",
+    description: "Native-quality cross-platform experiences. Fluid animations and offline-first architecture.",
     icon: Smartphone,
     colSpan: 1,
-    gradient: "from-fuchsia-600/20 to-pink-600/20",
-    tags: ["Flutter", "React Native", "iOS"]
-  },
-  {
-    id: "ai",
-    title: "AI & ML Systems",
-    description: "Custom AI models, NLP pipelines, and computer vision integration. We turn data into actionable intelligence.",
-    icon: BrainCircuit,
-    colSpan: 1,
-    gradient: "from-cyan-600/20 to-blue-600/20",
-    tags: ["Python", "TensorFlow", "LLMs"]
-  },
-  {
-    id: "cloud",
-    title: "Cloud Infrastructure",
-    description: "Serverless architectures, Kubernetes orchestration, and automated CI/CD pipelines for zero-downtime deployments.",
-    icon: Cloud,
-    colSpan: 2,
     gradient: "from-emerald-600/20 to-teal-600/20",
-    tags: ["AWS", "Azure", "Docker", "K8s"]
+    tags: ["Flutter", "React Native", "iOS"]
   },
   {
     id: "blockchain",
     title: "Blockchain Solutions",
-    description: "Smart contracts and dApps.",
+    description: "Secure smart contracts, DeFi protocols, and decentralized applications (dApps).",
     icon: ShieldCheck,
     colSpan: 1,
     gradient: "from-orange-600/20 to-red-600/20",
-    tags: ["Solidity", "Ethereum"]
+    tags: ["Solidity", "Web3", "Smart Contracts"]
+  },
+  {
+    id: "cloud",
+    title: "Cloud Infrastructure",
+    description: "Serverless architectures and Kubernetes orchestration for zero-downtime deployments.",
+    icon: Cloud,
+    colSpan: 1,
+    gradient: "from-rose-600/20 to-purple-600/20",
+    tags: ["AWS", "Kubernetes", "Docker"]
   },
   {
     id: "design",
     title: "Product Design",
-    description: "UI/UX that converts.",
+    description: "User-centric UI/UX design that drives engagement and conversion.",
     icon: Palette,
     colSpan: 1,
-    gradient: "from-rose-600/20 to-purple-600/20",
-    tags: ["Figma", "Motion"]
-  },
-  {
-    id: "consulting",
-    title: "Tech Strategy",
-    description: "Digital transformation roadmaps.",
-    icon: Layers,
-    colSpan: 1,
     gradient: "from-amber-600/20 to-yellow-600/20",
-    tags: ["Agile", "Architecture"]
+    tags: ["Figma", "Design Systems", "Prototyping"]
   }
 ]
 

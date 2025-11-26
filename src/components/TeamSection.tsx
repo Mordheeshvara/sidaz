@@ -132,7 +132,7 @@ function BinaryRain({ delay = 0 }: { delay?: number }) {
   );
 }
 
-// Ultra-smooth Team Card with advanced animations
+// Ultra-smooth Team Card with optimized rendering
 function TeamCard({
   member,
   index,
@@ -182,8 +182,8 @@ function TeamCard({
       ref={cardRef}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -193,160 +193,60 @@ function TeamCard({
         rotateY,
         transformStyle: "preserve-3d",
       }}
-      className="group cursor-pointer flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]"
+      className="group cursor-pointer flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px] will-change-transform"
     >
       <div className="relative">
-        {/* Card Container */}
-        <div className="relative bg-zinc-900/50 backdrop-blur-xl rounded-2xl overflow-hidden border border-zinc-800/50 hover:border-emerald-500/50 transition-all duration-500">
-          {/* Animated corner accents */}
-          <motion.div
-            className="absolute top-0 left-0 w-16 h-16 md:w-20 md:h-20 z-10"
-            animate={{
-              opacity: isHovered ? 1 : 0.3,
-            }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-emerald-500 to-transparent" />
-            <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-emerald-500 to-transparent" />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-0 right-0 w-16 h-16 md:w-20 md:h-20 z-10"
-            animate={{
-              opacity: isHovered ? 1 : 0.3,
-            }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="absolute bottom-0 right-0 w-full h-[2px] bg-gradient-to-l from-emerald-500 to-transparent" />
-            <div className="absolute bottom-0 right-0 w-[2px] h-full bg-gradient-to-t from-emerald-500 to-transparent" />
-          </motion.div>
+        {/* Card Container - Optimized: No blur, solid background */}
+        <div className="relative bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors duration-300">
 
-          {/* Scan line effect */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none z-10"
-            animate={{
-              backgroundPosition: isHovered ? ['0% 0%', '0% 100%'] : '0% 0%',
-            }}
-            transition={{
-              duration: 2,
-              repeat: isHovered ? Infinity : 0,
-              ease: "linear"
-            }}
-            style={{
-              background: 'linear-gradient(180deg, transparent 0%, rgba(16, 185, 129, 0.1) 50%, transparent 100%)',
-              backgroundSize: '100% 50%',
-            }}
-          />
+          {/* Simple corner accents */}
+          <div className={`absolute top-0 left-0 w-16 h-16 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-30'}`}>
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-emerald-500 to-transparent" />
+            <div className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-b from-emerald-500 to-transparent" />
+          </div>
+          <div className={`absolute bottom-0 right-0 w-16 h-16 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-30'}`}>
+            <div className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-emerald-500 to-transparent" />
+            <div className="absolute bottom-0 right-0 w-[1px] h-full bg-gradient-to-t from-emerald-500 to-transparent" />
+          </div>
 
           {/* Image Section */}
-          <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
+          <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden bg-zinc-900">
             <motion.div
               animate={{
-                scale: isHovered ? 1.1 : 1,
+                scale: isHovered ? 1.05 : 1,
               }}
-              transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ duration: 0.4 }}
               className="relative w-full h-full"
             >
               <Image
                 src={member.imageUrl}
                 alt={member.name}
                 fill
+                priority={index < 4}
                 className="object-cover object-top"
                 sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, 350px"
               />
             </motion.div>
 
             {/* Tech overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/50 to-transparent" />
-
-            {/* Holographic effect */}
-            <motion.div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{
-                background: 'linear-gradient(135deg, transparent 0%, rgba(16, 185, 129, 0.1) 50%, transparent 100%)',
-              }}
-            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent" />
 
             {/* Tech badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{
-                opacity: isHovered ? 1 : 0,
-                scale: isHovered ? 1 : 0,
-              }}
-              transition={{ duration: 0.3, ease: "backOut" }}
-              className="absolute top-3 right-3 md:top-4 md:right-4 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/50 rounded-lg px-2 py-1 md:px-3 md:py-1.5 flex items-center gap-1.5 md:gap-2"
-            >
+            <div className={`absolute top-3 right-3 md:top-4 md:right-4 bg-zinc-900/80 border border-emerald-500/30 rounded-lg px-2 py-1 md:px-3 md:py-1.5 flex items-center gap-1.5 md:gap-2 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
               <Terminal className="w-3 h-3 md:w-4 md:h-4 text-emerald-400" />
               <span className="text-[10px] md:text-xs text-emerald-400 font-mono">ACTIVE</span>
-            </motion.div>
-
-            {/* Floating particles on hover - hidden on mobile with CSS */}
-            {isHovered && (
-              <div className="hidden md:block">
-                {[...Array(8)].map((_, i) => {
-                  // Use deterministic values based on index to prevent hydration errors
-                  const xStart = (i * 37 % 100 - 50) / 100 * 20;
-                  const xEnd = (i * 73 % 100 - 50) / 100 * 100;
-                  const yStart = (i * 53 % 100 - 50) / 100 * 20;
-                  const yEnd = (i * 89 % 100 - 50) / 100 * 100;
-                  const leftPos = (i * 41 % 100);
-                  const topPos = (i * 67 % 100);
-
-                  return (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{
-                        opacity: [0, 1, 0],
-                        scale: [0, 1, 0],
-                        x: [xStart, xEnd],
-                        y: [yStart, yEnd],
-                      }}
-                      transition={{
-                        duration: 2,
-                        delay: i * 0.1,
-                        repeat: Infinity,
-                        repeatDelay: 0.5,
-                      }}
-                      className="absolute w-1 h-1 bg-emerald-400 rounded-full"
-                      style={{
-                        left: `${leftPos}%`,
-                        top: `${topPos}%`,
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            )}
+            </div>
           </div>
 
           {/* Content Section */}
-          <div className="p-4 sm:p-5 md:p-6 relative">
-            {/* Tech pattern background */}
-            <div className="absolute inset-0 opacity-5">
-              <Binary className="w-full h-full" />
-            </div>
-
+          <div className="p-4 sm:p-5 md:p-6 relative bg-zinc-950">
             <div className="relative z-10">
               {/* Name & Badge */}
               <div className="flex items-center justify-between mb-2">
-                <motion.h3
-                  className="text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight"
-                  animate={{
-                    color: isHovered ? '#10b981' : '#ffffff',
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
+                <h3 className={`text-lg sm:text-xl md:text-2xl font-bold tracking-tight transition-colors duration-300 ${isHovered ? 'text-emerald-400' : 'text-white'}`}>
                   {member.name}
-                </motion.h3>
-                <motion.div
-                  animate={{
-                    rotate: isHovered ? 360 : 0,
-                  }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
-                >
-                  <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
-                </motion.div>
+                </h3>
+                <BadgeCheck className={`w-5 h-5 md:w-6 md:h-6 text-emerald-400 transition-transform duration-500 ${isHovered ? 'rotate-[360deg]' : ''}`} />
               </div>
 
               {/* Role */}
@@ -362,58 +262,26 @@ function TeamCard({
                 {member.bio}
               </p>
 
-              {/* Hover Description - Shows on hover */}
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{
-                  opacity: isHovered ? 1 : 0,
-                  height: isHovered ? 'auto' : 0,
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="overflow-hidden mb-3 md:mb-4"
+              {/* Hover Description - CSS transition instead of Framer Motion for performance */}
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${isHovered ? 'max-h-24 opacity-100 mb-3 md:mb-4' : 'max-h-0 opacity-0 mb-0'}`}
               >
-                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-2 md:p-3">
+                <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-2 md:p-3">
                   <p className="text-zinc-300 text-[10px] sm:text-xs leading-relaxed line-clamp-2">
                     {member.expandedDescription}
                   </p>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Action button */}
-              <motion.div
-                className="flex items-center justify-end"
-                animate={{
-                  opacity: isHovered ? 1 : 0.7,
-                }}
-              >
+              <div className={`flex items-center justify-end transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-70'}`}>
                 <div className="flex items-center gap-1.5 md:gap-2 text-emerald-400 text-xs md:text-sm font-medium">
                   <span>View Profile</span>
-                  <motion.div
-                    animate={{
-                      x: isHovered ? [0, 5, 0] : 0,
-                    }}
-                    transition={{
-                      duration: 1,
-                      repeat: isHovered ? Infinity : 0,
-                    }}
-                  >
-                    →
-                  </motion.div>
+                  <span className={`transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`}>→</span>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
-
-          {/* Glow effect on hover */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none rounded-2xl"
-            animate={{
-              boxShadow: isHovered
-                ? '0 0 40px rgba(16, 185, 129, 0.3), inset 0 0 40px rgba(16, 185, 129, 0.1)'
-                : '0 0 0px rgba(16, 185, 129, 0)',
-            }}
-            transition={{ duration: 0.3 }}
-          />
         </div>
       </div>
     </motion.div>
@@ -424,7 +292,7 @@ export default function TeamSection({ className }: { className?: string }) {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollSpeed, setScrollSpeed] = useState(1);
-  const baseScrollX = useMotionValue(0);
+  const x = useMotionValue(0);
 
   // Smooth scroll speed transitions
   const smoothSpeed = useSpring(scrollSpeed, {
@@ -432,35 +300,33 @@ export default function TeamSection({ className }: { className?: string }) {
     damping: 30,
   });
 
-  // Create infinite loop by tripling the members
-  const infiniteMembers = [...defaultMembers, ...defaultMembers, ...defaultMembers];
+  // Create infinite loop by tripling the members - Memoized to prevent re-creation
+  const infiniteMembers = React.useMemo(() => [...defaultMembers, ...defaultMembers, ...defaultMembers], []);
 
-  // Ultra-smooth auto-scroll with variable speed
+  // Ultra-smooth auto-scroll with variable speed using GPU transforms
   useAnimationFrame(() => {
-    if (!containerRef.current) return;
-
-    const container = containerRef.current;
     const currentSpeed = smoothSpeed.get();
 
     // Responsive speed based on screen size
     const baseSpeed = window.innerWidth < 768 ? 0.5 : 0.8;
-    const increment = baseSpeed * currentSpeed;
-    const currentScroll = baseScrollX.get();
+    const moveAmount = baseSpeed * currentSpeed;
+
+    let newX = x.get() - moveAmount;
 
     // Calculate the width of one set of members
     const cardWidth = window.innerWidth < 640 ? 280 : window.innerWidth < 768 ? 320 : 350;
-    const gap = 20;
+    // Match CSS gap: gap-4 (16px) on mobile, gap-5 (20px) on md+
+    const gap = window.innerWidth < 768 ? 16 : 20;
+
     const singleSetWidth = (cardWidth + gap) * defaultMembers.length;
 
-    // When we've scrolled past one full set, reset seamlessly
-    if (currentScroll >= singleSetWidth) {
-      baseScrollX.set(currentScroll - singleSetWidth);
-      container.scrollLeft = currentScroll - singleSetWidth;
-    } else {
-      const newScroll = currentScroll + increment;
-      baseScrollX.set(newScroll);
-      container.scrollLeft = newScroll;
+    // Seamless looping logic
+    // When we've scrolled past one full set (negative x), reset instantly
+    if (newX <= -singleSetWidth) {
+      newX += singleSetWidth;
     }
+
+    x.set(newX);
   });
 
   const handleCardHover = () => {
@@ -482,12 +348,12 @@ export default function TeamSection({ className }: { className?: string }) {
       {/* Tech Grid Background */}
       <TechGrid />
 
-      {/* Binary rain effect - desktop only */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
+      {/* Binary rain effect - Removed for performance */}
+      {/* <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
         {[...Array(30)].map((_, i) => (
           <BinaryRain key={i} delay={i * 0.2} />
         ))}
-      </div>
+      </div> */}
 
       {/* Animated circuit lines */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
@@ -594,14 +460,18 @@ export default function TeamSection({ className }: { className?: string }) {
         {/* Infinite Smooth Scrolling Team Cards */}
         <div className="relative">
           <div
-            ref={containerRef}
             className="overflow-x-hidden pb-6 md:pb-8"
             style={{
+              // Hide scrollbar but keep functionality if needed (though we are using transform now)
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
             }}
           >
-            <div className="flex gap-4 md:gap-5 px-4">
+            <motion.div
+              ref={containerRef}
+              style={{ x }}
+              className="flex gap-4 md:gap-5 px-4 will-change-transform"
+            >
               {infiniteMembers.map((member, index) => (
                 <TeamCard
                   key={`${member.id}-${index}`}
@@ -612,7 +482,7 @@ export default function TeamSection({ className }: { className?: string }) {
                   onLeave={handleCardLeave}
                 />
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* Enhanced scroll indicators */}

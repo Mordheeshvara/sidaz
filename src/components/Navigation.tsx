@@ -76,56 +76,50 @@ export default function Navigation({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    let raf = 0;
+
+    // Throttled scroll handler for active section detection
+    let timeoutId: NodeJS.Timeout | null = null;
+
     const onScrollTopCheck = () => {
-      if (raf) return;
-      raf = window.requestAnimationFrame(() => {
-        raf = 0;
+      if (timeoutId) return;
+
+      timeoutId = setTimeout(() => {
+        timeoutId = null;
         const headerLine = scrollOffset;
         const sectionIds = links.map((l) => l.id);
+
+        // Optimized: Only query elements once per check
         const sections = sectionIds
           .map((id) => document.getElementById(id))
           .filter((el): el is HTMLElement => !!el);
 
-        const aboutEl = document.getElementById("about");
-        const homeId = sectionIds[0];
-        if (aboutEl && homeId) {
-          const aboutTop = aboutEl.getBoundingClientRect().top;
-          if (aboutTop - headerLine > 1) {
-            if (activeId !== homeId) setActiveId(homeId);
-            return;
+        let current: HTMLElement | null = null;
+        let currentTop = -Infinity;
+
+        // Find the section currently in view
+        for (const s of sections) {
+          const rect = s.getBoundingClientRect();
+          // Check if section is roughly in view (top is above header line)
+          if (rect.top - headerLine <= 100) {
+            if (rect.top > currentTop) {
+              currentTop = rect.top;
+              current = s;
+            }
           }
         }
 
-        let current: HTMLElement | null = null;
-        let currentTop = -Infinity;
-        let next: HTMLElement | null = null;
-        let nextTop = Infinity;
-        for (const s of sections) {
-          const top = s.getBoundingClientRect().top;
-          if (top - headerLine <= 1) {
-            if (top > currentTop) {
-              currentTop = top;
-              current = s;
-            }
-          } else if (top < nextTop) {
-            nextTop = top;
-            next = s;
-          }
-        }
-        const targetId = (current ?? next)?.id;
+        const targetId = current?.id || links[0]?.id;
         if (targetId && targetId !== activeId) setActiveId(targetId);
-      });
+      }, 100); // Check every 100ms instead of every frame
     };
 
     window.addEventListener("scroll", onScrollTopCheck, { passive: true });
-    window.addEventListener("resize", onScrollTopCheck, { passive: true });
+    // Initial check
     onScrollTopCheck();
 
     return () => {
       window.removeEventListener("scroll", onScrollTopCheck);
-      window.removeEventListener("resize", onScrollTopCheck);
-      if (raf) cancelAnimationFrame(raf);
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, [links, activeId, scrollOffset]);
 
@@ -174,13 +168,6 @@ export default function Navigation({
               transition={{ type: "spring", stiffness: 380, damping: 30 }}
             />
           )}
-          {isActive && (
-            <motion.span
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/2 h-1 rounded-full bg-fuchsia-400 blur-sm"
-              layoutId="activeGlow"
-              transition={{ duration: 0.3 }}
-            />
-          )}
         </motion.button>
       );
     },
@@ -196,19 +183,19 @@ export default function Navigation({
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={clsx(
         "fixed top-0 inset-x-0 z-50",
-        "backdrop-blur-xl",
-        "border-b transition-all duration-300",
+        "backdrop-blur-md", // Reduced blur for performance
+        "border-b transition-all duration-300 will-change-transform",
         scrolled
-          ? "border-purple-500/30 bg-slate-950/80"
+          ? "border-purple-500/30 bg-slate-950/90"
           : "border-purple-500/10 bg-slate-950/60",
         className || ""
       )}
       style={style}
     >
-      {/* Animated Background Gradients */}
+      {/* Animated Background Gradients - Optimized */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute -top-20 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"
+          className="absolute -top-20 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl will-change-transform"
           animate={{
             x: [0, 50, 0],
             y: [0, 30, 0],
@@ -220,7 +207,7 @@ export default function Navigation({
           }}
         />
         <motion.div
-          className="absolute -top-20 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"
+          className="absolute -top-20 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl will-change-transform"
           animate={{
             x: [0, -50, 0],
             y: [0, 30, 0],
@@ -275,7 +262,7 @@ export default function Navigation({
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[90vw] max-w-sm bg-gradient-to-br from-slate-950 via-purple-950/20 to-slate-950 backdrop-blur-xl border-l border-purple-500/30 p-0 flex flex-col"
+                className="w-[90vw] max-w-sm bg-gradient-to-br from-slate-950 via-purple-950/20 to-slate-950 backdrop-blur-md border-l border-purple-500/30 p-0 flex flex-col"
                 aria-label="Mobile menu"
               >
                 {/* Mobile Menu Background */}
@@ -340,9 +327,9 @@ export default function Navigation({
         </div>
       </div>
 
-      {/* Glowing Bottom Border */}
+      {/* Glowing Bottom Border - Optimized */}
       <motion.div
-        className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent"
+        className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent will-change-transform"
         animate={{
           opacity: [0.3, 0.6, 0.3],
         }}

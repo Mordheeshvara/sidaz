@@ -57,7 +57,7 @@ export default function HeroSection({
 
         {/* Floating Particles */}
         <motion.div
-          className="absolute top-[10%] left-[10%] w-64 h-64 bg-violet-500/20 rounded-full blur-3xl"
+          className="absolute top-[10%] left-[10%] w-64 h-64 bg-violet-500/20 rounded-full blur-3xl will-change-transform"
           animate={{
             x: [0, 50, 0],
             y: [0, -30, 0],
@@ -94,7 +94,7 @@ export default function HeroSection({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8"
+          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8 will-change-transform"
         >
           Redefining <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-200 to-emerald-400 animate-gradient-x">
