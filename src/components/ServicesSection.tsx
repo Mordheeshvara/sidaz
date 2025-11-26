@@ -114,7 +114,7 @@ function Card({ service, index }: { service: ServiceItem; index: number }) {
       transition={{ delay: index * 0.1, duration: 0.5 }}
       onMouseMove={handleMouseMove}
       className={cn(
-        "group relative rounded-3xl border border-white/10 bg-zinc-900/50 overflow-hidden hover:border-white/20 transition-colors duration-500",
+        "group relative rounded-3xl overflow-hidden transition-all duration-500 glass-premium hover-lift-glow",
         service.colSpan === 2 ? "md:col-span-2" : "md:col-span-1"
       )}
     >
@@ -217,7 +217,7 @@ export default function ServicesSection({ className }: { className?: string }) {
             className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight"
           >
             Engineering <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-white">
+            <span className="text-shimmer font-extrabold">
               The Impossible
             </span>
           </motion.h2>

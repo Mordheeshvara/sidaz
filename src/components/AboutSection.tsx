@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { Lightbulb, Target, Award, TrendingUp, Users, Globe, ArrowRight, Star, Sparkles, Heart, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export interface AboutSectionProps {
   className?: string;
@@ -98,7 +99,7 @@ export default function AboutSection({ className }: { className?: string }) {
             className="text-4xl md:text-6xl font-bold mb-8 text-white leading-tight"
           >
             Born in 2024. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600">
+            <span className="text-gradient-gold animate-pulse-glow">
               Launching the Future in 2025.
             </span>
           </motion.h2>
@@ -115,100 +116,63 @@ export default function AboutSection({ className }: { className?: string }) {
         </div>
 
         {/* Bento Grid Layout */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
           {/* Mission Card - Large */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 bg-zinc-900/50 border border-white/10 rounded-3xl p-8 relative overflow-hidden group hover:border-amber-500/30 transition-colors duration-500"
+            className="md:col-span-2 h-full"
           >
-            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-              <Target className="w-32 h-32 text-amber-500" />
-            </div>
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6">
-                <Target className="w-6 h-6 text-amber-400" />
+            <SpotlightCard className="h-full p-8 relative group hover:bg-zinc-900/80 transition-colors duration-500" spotlightColor="rgba(245, 158, 11, 0.2)">
+              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
+                <Target className="w-32 h-32 text-amber-500" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Our Mission</h3>
-              <p className="text-zinc-400 text-lg leading-relaxed max-w-xl">
-                To empower businesses with digital solutions that are as beautiful as they are functional. We strip away the noise to deliver pure, high-impact results that drive growth and engagement.
-              </p>
-            </div>
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6">
+                  <Target className="w-6 h-6 text-amber-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Our Mission</h3>
+                <p className="text-zinc-400 text-lg leading-relaxed max-w-xl">
+                  To empower businesses with digital solutions that are as beautiful as they are functional. We strip away the noise to deliver pure, high-impact results that drive growth and engagement.
+                </p>
+              </div>
+            </SpotlightCard>
           </motion.div>
 
           {/* Stats Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="bg-zinc-900/50 border border-white/10 rounded-3xl p-8 flex flex-col justify-center relative overflow-hidden group hover:border-amber-500/30 transition-colors duration-500"
-          >
-            <div className="grid grid-cols-2 gap-8">
-              {stats.slice(0, 2).map((stat, i) => (
-                <div key={i}>
-                  <p className="text-4xl font-bold text-white mb-1">{stat.value}{stat.suffix}</p>
-                  <p className="text-sm text-zinc-500 uppercase tracking-wider">{stat.label}</p>
-                </div>
-              ))}
-              {stats.slice(2, 4).map((stat, i) => (
-                <div key={i}>
-                  <p className="text-4xl font-bold text-white mb-1">{stat.value}{stat.suffix}</p>
-                  <p className="text-sm text-zinc-500 uppercase tracking-wider">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Vision Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="bg-zinc-900/50 border border-white/10 rounded-3xl p-8 relative overflow-hidden group hover:border-amber-500/30 transition-colors duration-500"
-          >
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6">
-              <Lightbulb className="w-6 h-6 text-amber-400" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-4">Our Vision</h3>
-            <p className="text-zinc-400 leading-relaxed">
-              To be the global standard for digital craftsmanship, where every pixel serves a purpose and every interaction tells a story.
-            </p>
-          </motion.div>
-
-          {/* Values Card - Large */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="md:col-span-2 bg-zinc-900/50 border border-white/10 rounded-3xl p-8 relative overflow-hidden group hover:border-amber-500/30 transition-colors duration-500"
+            className="md:col-span-1 h-full"
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
-                  <Heart className="w-5 h-5 text-amber-400" />
+            <SpotlightCard className="h-full p-8 relative group hover:bg-zinc-900/80 transition-colors duration-500" spotlightColor="rgba(245, 158, 11, 0.2)">
+              <div className="grid grid-cols-1 gap-8 h-full content-center">
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
+                    <Heart className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <h4 className="text-lg font-bold text-white mb-2">Passion</h4>
+                  <p className="text-sm text-zinc-400">We love what we do, and it shows in every line of code.</p>
                 </div>
-                <h4 className="text-lg font-bold text-white mb-2">Passion</h4>
-                <p className="text-sm text-zinc-400">We love what we do, and it shows in every line of code.</p>
-              </div>
-              <div>
-                <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
-                  <Trophy className="w-5 h-5 text-amber-400" />
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
+                    <Trophy className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <h4 className="text-lg font-bold text-white mb-2">Excellence</h4>
+                  <p className="text-sm text-zinc-400">Good enough is never enough. We aim for perfection.</p>
                 </div>
-                <h4 className="text-lg font-bold text-white mb-2">Excellence</h4>
-                <p className="text-sm text-zinc-400">Good enough is never enough. We aim for perfection.</p>
-              </div>
-              <div>
-                <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
-                  <Users className="w-5 h-5 text-amber-400" />
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
+                    <Users className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <h4 className="text-lg font-bold text-white mb-2">Partnership</h4>
+                  <p className="text-sm text-zinc-400">We don't just work for you; we work with you.</p>
                 </div>
-                <h4 className="text-lg font-bold text-white mb-2">Partnership</h4>
-                <p className="text-sm text-zinc-400">We don't just work for you; we work with you.</p>
               </div>
-            </div>
+            </SpotlightCard>
           </motion.div>
         </div>
 
@@ -272,11 +236,18 @@ export default function AboutSection({ className }: { className?: string }) {
             <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-amber-500/30 shadow-[0_0_60px_rgba(245,158,11,0.3)] mb-8 overflow-hidden group">
               <div className="absolute inset-0 rounded-full border-4 border-amber-500/50 animate-pulse-glow-emerald opacity-50" />
               <Image
-                src="/images/founder-sara.png"
+                src="/images/team/founder .jpeg"
                 alt="Founder"
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                priority
+                sizes="(max-width: 768px) 256px, 320px"
+                quality={95}
+                className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
               />
+              {/* Backdrop blur effect - creates depth and focus */}
+              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/40 pointer-events-none" />
+              {/* Subtle vignette for professional look */}
+              <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.3)] pointer-events-none rounded-full" />
             </div>
             <cite className="text-3xl font-bold text-white not-italic mb-2">Sarathy</cite>
             <span className="text-amber-400 font-medium tracking-widest uppercase text-sm">Founder</span>

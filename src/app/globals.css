@@ -36,6 +36,8 @@
 
     --radius: 0.75rem;
     --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 }
 
@@ -297,6 +299,33 @@
 
   .animate-float-premium {
     animation: floatPremium 6s ease-in-out infinite;
+  }
+
+  /* Ultra Premium Utilities */
+  .glass-premium {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  }
+
+  .hover-lift-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-lift-glow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .text-shimmer {
+    background: linear-gradient(to right, #9ca3af 20%, #ffffff 40%, #ffffff 60%, #9ca3af 80%);
+    background-size: 200% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: shimmer 3s linear infinite;
   }
 }
 

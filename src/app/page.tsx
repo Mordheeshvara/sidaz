@@ -35,7 +35,7 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <HeroSection
-        id="hero"
+        id="home"
         primaryHref="#contact"
         secondaryHref="#portfolio"
         onPrimaryClick={undefined}

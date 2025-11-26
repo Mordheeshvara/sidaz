@@ -146,7 +146,7 @@ export default function ContactSection({
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="flex items-center gap-6 group"
+                className="flex items-center gap-6 group hover-lift-glow p-4 rounded-2xl transition-all"
               >
                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-500">
                   <Mail className="w-8 h-8 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
@@ -163,7 +163,7 @@ export default function ContactSection({
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center gap-6 group"
+                className="flex items-center gap-6 group hover-lift-glow p-4 rounded-2xl transition-all"
               >
                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-teal-500/10 group-hover:border-teal-500/30 transition-all duration-500">
                   <Phone className="w-8 h-8 text-zinc-400 group-hover:text-teal-400 transition-colors" />
@@ -182,7 +182,7 @@ export default function ContactSection({
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="relative z-10 bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-2xl"
+              className="relative z-10 glass-premium rounded-[2rem] p-8 md:p-10"
             >
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

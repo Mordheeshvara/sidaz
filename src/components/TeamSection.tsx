@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Users, Linkedin, Instagram, Mail, ChevronLeft, ChevronRight, BadgeCheck, Sparkles, Zap } from "lucide-react";
+import { motion, useMotionValue, useSpring, useAnimationFrame } from "framer-motion";
+import { Linkedin, Instagram, Mail, BadgeCheck, Code2, Cpu, Zap, Terminal, Binary, Network, Sparkles, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-// ... (Types remain similar but enhanced)
 type TeamMember = {
   id: string;
   name: string;
@@ -21,7 +20,7 @@ type TeamMember = {
   expandedDescription: string;
   contact: { email: string; linkedin: string; instagram: string };
   imageUrl: string;
-  skills: { name: string; level: number }[];
+  skills: string[]; // Changed from level-based to simple tags
 };
 
 const defaultMembers: TeamMember[] = [
@@ -33,7 +32,7 @@ const defaultMembers: TeamMember[] = [
     expandedDescription: "As CEO, Shruti spearheads SIDAZ's strategic vision with exceptional leadership. She expertly navigates complex market dynamics while fostering innovation across all departments.",
     contact: { email: "shrutithamizhselvan@gmail.com", linkedin: "#", instagram: "#" },
     imageUrl: "/images/team/Shruti.jpeg",
-    skills: [{ name: "Leadership", level: 98 }, { name: "Strategy", level: 95 }, { name: "Innovation", level: 92 }]
+    skills: ["Leadership", "Business Strategy", "AI Tools", "SaaS Model", "Innovation"]
   },
   {
     id: "5",
@@ -43,7 +42,7 @@ const defaultMembers: TeamMember[] = [
     expandedDescription: "Arjun drives SIDAZ's technology strategy. His expertise spans multiple technology stacks and emerging platforms, ensuring optimal solutions for complex challenges.",
     contact: { email: "arjunfree256@gmail.com", linkedin: "#", instagram: "#" },
     imageUrl: "/images/team/arjun.png",
-    skills: [{ name: "System Arch", level: 96 }, { name: "AI/ML", level: 90 }, { name: "Cloud", level: 94 }]
+    skills: ["Web Development", "App Development", "AI & ML", "Deep AI Development", "Cloud Architecture"]
   },
   {
     id: "2",
@@ -53,7 +52,7 @@ const defaultMembers: TeamMember[] = [
     expandedDescription: "Mordheesh brings innovative marketing strategies and deep market understanding. His expertise in digital marketing campaigns has significantly enhanced client engagement.",
     contact: { email: "mordheeshvarab@gmail.com", linkedin: "#", instagram: "#" },
     imageUrl: "/images/team/mothy.png",
-    skills: [{ name: "Branding", level: 95 }, { name: "Digital Mkt", level: 92 }, { name: "Analytics", level: 88 }]
+    skills: ["Digital Marketing", "UI/UX Design", "AI Tools", "Brand Strategy", "Analytics"]
   },
   {
     id: "6",
@@ -63,7 +62,7 @@ const defaultMembers: TeamMember[] = [
     expandedDescription: "Pratheeb oversees SIDAZ's financial strategy. His analytical approach to financial planning and risk management has strengthened the company's economic foundation.",
     contact: { email: "pratheebsuriya786@gmail.com", linkedin: "#", instagram: "#" },
     imageUrl: "/images/team/suriya.png",
-    skills: [{ name: "Finance", level: 97 }, { name: "Risk Mgmt", level: 94 }, { name: "Planning", level: 90 }]
+    skills: ["Financial Planning", "SaaS Model", "Risk Management", "AI Tools", "Business Analytics"]
   },
   {
     id: "3",
@@ -73,7 +72,7 @@ const defaultMembers: TeamMember[] = [
     expandedDescription: "Ravikanth leads blockchain initiatives. His innovative approach to decentralized solutions has enabled secure, scalable platforms for diverse client needs.",
     contact: { email: "ravikanthsankaran@gmail.com", linkedin: "#", instagram: "#" },
     imageUrl: "/images/team/raka.png",
-    skills: [{ name: "Smart Contracts", level: 96 }, { name: "Web3", level: 94 }, { name: "Security", level: 92 }]
+    skills: ["Blockchain", "Web3", "Smart Contracts", "AI & ML", "Security"]
   },
   {
     id: "8",
@@ -83,226 +82,825 @@ const defaultMembers: TeamMember[] = [
     expandedDescription: "Dhinesh orchestrates operational efficiency. His systematic approach to workflow management ensures seamless project delivery across all departments.",
     contact: { email: "dhineshsidaz@gmail.com", linkedin: "#", instagram: "#" },
     imageUrl: "/images/team/dhinesh.png",
-    skills: [{ name: "Operations", level: 95 }, { name: "Process Opt", level: 93 }, { name: "Mgmt", level: 90 }]
+    skills: ["Operations", "SaaS Model", "AI Tools Development", "Process Optimization", "Project Management"]
   },
 ];
 
-export default function TeamSection({ className }: { className?: string }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+// Tech grid background component
+function TechGrid() {
+  return (
+    <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0" style={{
+        backgroundImage: `
+          linear-gradient(to right, rgba(16, 185, 129, 0.1) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(16, 185, 129, 0.1) 1px, transparent 1px)
+        `,
+        backgroundSize: '40px 40px'
+      }} />
+    </div>
+  );
+}
 
-  // Auto-rotate
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % defaultMembers.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+// Binary rain effect
+function BinaryRain({ delay = 0 }: { delay?: number }) {
+  // Use useMemo to generate stable random values that won't cause hydration errors
+  const randomValues = React.useMemo(() => ({
+    char: Math.random() > 0.5 ? '1' : '0',
+    left: Math.random() * 100,
+  }), []);
 
-  const getVisibleMembers = () => {
-    const total = defaultMembers.length;
-    const prev = (activeIndex - 1 + total) % total;
-    const next = (activeIndex + 1) % total;
-    return [
-      { ...defaultMembers[prev], position: 'left' },
-      { ...defaultMembers[activeIndex], position: 'center' },
-      { ...defaultMembers[next], position: 'right' }
-    ];
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{
+        opacity: [0, 1, 0],
+        y: [0, 100],
+      }}
+      transition={{
+        duration: 3,
+        delay,
+        repeat: Infinity,
+        ease: "linear"
+      }}
+      className="absolute text-emerald-500/30 font-mono text-xs"
+      style={{
+        left: `${randomValues.left}%`,
+      }}
+    >
+      {randomValues.char}
+    </motion.div>
+  );
+}
+
+// Ultra-smooth Team Card with advanced animations
+function TeamCard({
+  member,
+  index,
+  onClick,
+  onHover,
+  onLeave,
+}: {
+  member: TeamMember;
+  index: number;
+  onClick: () => void;
+  onHover: () => void;
+  onLeave: () => void;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Mouse tracking for 3D tilt effect (desktop only)
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(mouseX, { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(mouseY, { stiffness: 300, damping: 30 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current || window.innerWidth < 768) return; // Disable on mobile
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
+    const y = ((e.clientX - rect.left) / rect.width - 0.5) * -10;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    onHover();
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+    setIsHovered(false);
+    onLeave();
   };
 
   return (
-    <section className={cn(
-      "relative w-full py-32 overflow-hidden",
-      "bg-slate-950", // Base dark background
-      className
-    )}>
-      {/* Animated Background - Premium Emerald Theme */}
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      className="group cursor-pointer flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]"
+    >
+      <div className="relative">
+        {/* Card Container */}
+        <div className="relative bg-zinc-900/50 backdrop-blur-xl rounded-2xl overflow-hidden border border-zinc-800/50 hover:border-emerald-500/50 transition-all duration-500">
+          {/* Animated corner accents */}
+          <motion.div
+            className="absolute top-0 left-0 w-16 h-16 md:w-20 md:h-20 z-10"
+            animate={{
+              opacity: isHovered ? 1 : 0.3,
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-emerald-500 to-transparent" />
+            <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-emerald-500 to-transparent" />
+          </motion.div>
+          <motion.div
+            className="absolute bottom-0 right-0 w-16 h-16 md:w-20 md:h-20 z-10"
+            animate={{
+              opacity: isHovered ? 1 : 0.3,
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="absolute bottom-0 right-0 w-full h-[2px] bg-gradient-to-l from-emerald-500 to-transparent" />
+            <div className="absolute bottom-0 right-0 w-[2px] h-full bg-gradient-to-t from-emerald-500 to-transparent" />
+          </motion.div>
+
+          {/* Scan line effect */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none z-10"
+            animate={{
+              backgroundPosition: isHovered ? ['0% 0%', '0% 100%'] : '0% 0%',
+            }}
+            transition={{
+              duration: 2,
+              repeat: isHovered ? Infinity : 0,
+              ease: "linear"
+            }}
+            style={{
+              background: 'linear-gradient(180deg, transparent 0%, rgba(16, 185, 129, 0.1) 50%, transparent 100%)',
+              backgroundSize: '100% 50%',
+            }}
+          />
+
+          {/* Image Section */}
+          <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
+            <motion.div
+              animate={{
+                scale: isHovered ? 1.1 : 1,
+              }}
+              transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+              className="relative w-full h-full"
+            >
+              <Image
+                src={member.imageUrl}
+                alt={member.name}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, 350px"
+              />
+            </motion.div>
+
+            {/* Tech overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/50 to-transparent" />
+
+            {/* Holographic effect */}
+            <motion.div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{
+                background: 'linear-gradient(135deg, transparent 0%, rgba(16, 185, 129, 0.1) 50%, transparent 100%)',
+              }}
+            />
+
+            {/* Tech badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{
+                opacity: isHovered ? 1 : 0,
+                scale: isHovered ? 1 : 0,
+              }}
+              transition={{ duration: 0.3, ease: "backOut" }}
+              className="absolute top-3 right-3 md:top-4 md:right-4 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/50 rounded-lg px-2 py-1 md:px-3 md:py-1.5 flex items-center gap-1.5 md:gap-2"
+            >
+              <Terminal className="w-3 h-3 md:w-4 md:h-4 text-emerald-400" />
+              <span className="text-[10px] md:text-xs text-emerald-400 font-mono">ACTIVE</span>
+            </motion.div>
+
+            {/* Floating particles on hover - hidden on mobile with CSS */}
+            {isHovered && (
+              <div className="hidden md:block">
+                {[...Array(8)].map((_, i) => {
+                  // Use deterministic values based on index to prevent hydration errors
+                  const xStart = (i * 37 % 100 - 50) / 100 * 20;
+                  const xEnd = (i * 73 % 100 - 50) / 100 * 100;
+                  const yStart = (i * 53 % 100 - 50) / 100 * 20;
+                  const yEnd = (i * 89 % 100 - 50) / 100 * 100;
+                  const leftPos = (i * 41 % 100);
+                  const topPos = (i * 67 % 100);
+
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{
+                        opacity: [0, 1, 0],
+                        scale: [0, 1, 0],
+                        x: [xStart, xEnd],
+                        y: [yStart, yEnd],
+                      }}
+                      transition={{
+                        duration: 2,
+                        delay: i * 0.1,
+                        repeat: Infinity,
+                        repeatDelay: 0.5,
+                      }}
+                      className="absolute w-1 h-1 bg-emerald-400 rounded-full"
+                      style={{
+                        left: `${leftPos}%`,
+                        top: `${topPos}%`,
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Content Section */}
+          <div className="p-4 sm:p-5 md:p-6 relative">
+            {/* Tech pattern background */}
+            <div className="absolute inset-0 opacity-5">
+              <Binary className="w-full h-full" />
+            </div>
+
+            <div className="relative z-10">
+              {/* Name & Badge */}
+              <div className="flex items-center justify-between mb-2">
+                <motion.h3
+                  className="text-lg sm:text-xl md:text-2xl font-bold text-white tracking-tight"
+                  animate={{
+                    color: isHovered ? '#10b981' : '#ffffff',
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {member.name}
+                </motion.h3>
+                <motion.div
+                  animate={{
+                    rotate: isHovered ? 360 : 0,
+                  }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                >
+                  <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
+                </motion.div>
+              </div>
+
+              {/* Role */}
+              <div className="flex items-center gap-2 mb-3 md:mb-4">
+                <Code2 className="w-3 h-3 md:w-4 md:h-4 text-emerald-500 flex-shrink-0" />
+                <p className="text-emerald-400 font-mono text-xs md:text-sm tracking-wide line-clamp-1">
+                  {member.role}
+                </p>
+              </div>
+
+              {/* Bio */}
+              <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed mb-3 md:mb-4 line-clamp-2">
+                {member.bio}
+              </p>
+
+              {/* Hover Description - Shows on hover */}
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{
+                  opacity: isHovered ? 1 : 0,
+                  height: isHovered ? 'auto' : 0,
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="overflow-hidden mb-3 md:mb-4"
+              >
+                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-2 md:p-3">
+                  <p className="text-zinc-300 text-[10px] sm:text-xs leading-relaxed line-clamp-2">
+                    {member.expandedDescription}
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Action button */}
+              <motion.div
+                className="flex items-center justify-end"
+                animate={{
+                  opacity: isHovered ? 1 : 0.7,
+                }}
+              >
+                <div className="flex items-center gap-1.5 md:gap-2 text-emerald-400 text-xs md:text-sm font-medium">
+                  <span>View Profile</span>
+                  <motion.div
+                    animate={{
+                      x: isHovered ? [0, 5, 0] : 0,
+                    }}
+                    transition={{
+                      duration: 1,
+                      repeat: isHovered ? Infinity : 0,
+                    }}
+                  >
+                    →
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Glow effect on hover */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            animate={{
+              boxShadow: isHovered
+                ? '0 0 40px rgba(16, 185, 129, 0.3), inset 0 0 40px rgba(16, 185, 129, 0.1)'
+                : '0 0 0px rgba(16, 185, 129, 0)',
+            }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function TeamSection({ className }: { className?: string }) {
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scrollSpeed, setScrollSpeed] = useState(1);
+  const baseScrollX = useMotionValue(0);
+
+  // Smooth scroll speed transitions
+  const smoothSpeed = useSpring(scrollSpeed, {
+    stiffness: 100,
+    damping: 30,
+  });
+
+  // Create infinite loop by tripling the members
+  const infiniteMembers = [...defaultMembers, ...defaultMembers, ...defaultMembers];
+
+  // Ultra-smooth auto-scroll with variable speed
+  useAnimationFrame(() => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+    const currentSpeed = smoothSpeed.get();
+
+    // Responsive speed based on screen size
+    const baseSpeed = window.innerWidth < 768 ? 0.5 : 0.8;
+    const increment = baseSpeed * currentSpeed;
+    const currentScroll = baseScrollX.get();
+
+    // Calculate the width of one set of members
+    const cardWidth = window.innerWidth < 640 ? 280 : window.innerWidth < 768 ? 320 : 350;
+    const gap = 20;
+    const singleSetWidth = (cardWidth + gap) * defaultMembers.length;
+
+    // When we've scrolled past one full set, reset seamlessly
+    if (currentScroll >= singleSetWidth) {
+      baseScrollX.set(currentScroll - singleSetWidth);
+      container.scrollLeft = currentScroll - singleSetWidth;
+    } else {
+      const newScroll = currentScroll + increment;
+      baseScrollX.set(newScroll);
+      container.scrollLeft = newScroll;
+    }
+  });
+
+  const handleCardHover = () => {
+    setScrollSpeed(0.3);
+  };
+
+  const handleCardLeave = () => {
+    setScrollSpeed(1);
+  };
+
+  return (
+    <section
+      className={cn(
+        "relative w-full py-16 md:py-24 overflow-hidden",
+        "bg-gradient-to-b from-slate-950 via-zinc-950 to-slate-950",
+        className
+      )}
+    >
+      {/* Tech Grid Background */}
+      <TechGrid />
+
+      {/* Binary rain effect - desktop only */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
+        {[...Array(30)].map((_, i) => (
+          <BinaryRain key={i} delay={i * 0.2} />
+        ))}
+      </div>
+
+      {/* Animated circuit lines */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <motion.div
+          className="absolute top-1/4 left-0 right-0 h-[1px]"
+          animate={{
+            background: [
+              'linear-gradient(90deg, transparent 0%, #10b981 50%, transparent 100%)',
+              'linear-gradient(90deg, transparent 100%, #10b981 150%, transparent 200%)',
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute top-3/4 left-0 right-0 h-[1px]"
+          animate={{
+            background: [
+              'linear-gradient(90deg, transparent 100%, #06b6d4 150%, transparent 200%)',
+              'linear-gradient(90deg, transparent 0%, #06b6d4 50%, transparent 100%)',
+            ],
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
+
+      {/* Glowing orbs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-500/5 rounded-full blur-[120px] animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.03)_0%,transparent_70%)]" />
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.05, 0.1, 0.05],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-0 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-emerald-500 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.05, 0.08, 0.05],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+          className="absolute bottom-0 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-cyan-500 rounded-full blur-[120px]"
+        />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-24">
+        {/* Header */}
+        <div className="text-center mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-emerald-400 text-sm font-medium mb-6"
+            className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-full bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-xl mb-4 md:mb-6"
           >
-            <Sparkles className="w-4 h-4" />
-            <span>World Class Talent</span>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            >
+              <Cpu className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" />
+            </motion.div>
+            <span className="text-emerald-400 font-mono text-xs md:text-sm tracking-wider">ELITE_TECH_TEAM</span>
+            <motion.div
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-1.5 h-1.5 md:w-2 md:h-2 bg-emerald-400 rounded-full"
+            />
           </motion.div>
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold mb-6 text-white tracking-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 tracking-tight px-4"
           >
-            The Minds Behind <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">SIDAZ</span>
+            <span className="text-white">Meet The </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 animate-gradient">
+              Innovators
+            </span>
           </motion.h2>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-zinc-400 max-w-2xl mx-auto text-lg"
+            className="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base lg:text-lg font-light px-4"
           >
-            A collective of visionaries, engineers, and strategists building the impossible.
+            <span className="text-emerald-400 font-mono">&lt;</span>
+            {" "}Building next-generation solutions with cutting-edge technology{" "}
+            <span className="text-emerald-400 font-mono">/&gt;</span>
           </motion.p>
         </div>
 
-        {/* 3D Cover Flow Carousel */}
-        <div className="relative h-[650px] flex items-center justify-center perspective-[2000px]">
-          <AnimatePresence mode="popLayout">
-            {getVisibleMembers().map((member) => {
-              const isCenter = member.position === 'center';
-              const isLeft = member.position === 'left';
+        {/* Infinite Smooth Scrolling Team Cards */}
+        <div className="relative">
+          <div
+            ref={containerRef}
+            className="overflow-x-hidden pb-6 md:pb-8"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+          >
+            <div className="flex gap-4 md:gap-5 px-4">
+              {infiniteMembers.map((member, index) => (
+                <TeamCard
+                  key={`${member.id}-${index}`}
+                  member={member}
+                  index={index % defaultMembers.length}
+                  onClick={() => setSelectedMember(member)}
+                  onHover={handleCardHover}
+                  onLeave={handleCardLeave}
+                />
+              ))}
+            </div>
+          </div>
 
-              return (
+          {/* Enhanced scroll indicators */}
+          <div className="flex justify-center gap-2 md:gap-3 mt-6 md:mt-8">
+            {defaultMembers.map((member, idx) => (
+              <motion.div
+                key={idx}
+                className="relative"
+              >
                 <motion.div
-                  key={member.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500/30"
                   animate={{
-                    opacity: isCenter ? 1 : 0.3,
-                    scale: isCenter ? 1 : 0.8,
-                    x: isCenter ? 0 : isLeft ? '-65%' : '65%',
-                    z: isCenter ? 100 : -200,
-                    rotateY: isCenter ? 0 : isLeft ? 35 : -35,
-                    zIndex: isCenter ? 20 : 10
+                    scale: [1, 1.5, 1],
+                    opacity: [0.3, 1, 0.3],
                   }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} // smooth easeOutExpo-ish
-                  onClick={() => isCenter ? setSelectedMember(member) : setActiveIndex(defaultMembers.findIndex(m => m.id === member.id))}
-                  className={cn(
-                    "absolute w-[340px] md:w-[420px] h-[580px] rounded-[2rem] overflow-hidden cursor-pointer",
-                    "bg-zinc-900/90 border border-white/10 backdrop-blur-xl",
-                    isCenter ? "shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] ring-1 ring-white/20" : "grayscale-[0.5] blur-[1px]"
-                  )}
-                >
-                  {/* Card Content */}
-                  <div className="relative h-full flex flex-col group">
-                    <div className="relative h-[65%] w-full overflow-hidden">
-                      <Image
-                        src={member.imageUrl}
-                        alt={member.name}
-                        fill
-                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-90" />
-                    </div>
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: idx * 0.5,
+                    ease: "easeInOut"
+                  }}
+                />
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-emerald-400"
+                  animate={{
+                    scale: [1, 2, 1],
+                    opacity: [0.5, 0, 0.5],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: idx * 0.5,
+                    ease: "easeInOut"
+                  }}
+                />
+              </motion.div>
+            ))}
+          </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col justify-end h-full pointer-events-none">
-                      <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-3xl font-bold text-white">{member.name}</h3>
-                          {isCenter && <BadgeCheck className="w-6 h-6 text-emerald-400" />}
-                        </div>
-                        <p className="text-emerald-400 font-medium tracking-wide text-sm mb-3">{member.role}</p>
-                        <p className="text-zinc-300 text-sm line-clamp-2 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                          {member.bio}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
+          {/* Speed indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center mt-4 md:mt-6"
+          >
+            <div className="inline-flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-zinc-900/50 border border-zinc-800/50 backdrop-blur-sm">
+              <Network className="w-3 h-3 md:w-4 md:h-4 text-emerald-500" />
+              <span className="text-zinc-500 text-xs md:text-sm font-mono">
+                {scrollSpeed < 0.5 ? 'SLOWED' : 'AUTO_SCROLLING'}
+              </span>
+              <motion.div
+                animate={{
+                  opacity: [1, 0.3, 1],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{
+                  duration: scrollSpeed < 0.5 ? 2 : 1.5,
+                  repeat: Infinity
+                }}
+                className="w-1 h-1 md:w-1.5 md:h-1.5 bg-emerald-500 rounded-full"
+              />
+            </div>
+          </motion.div>
 
-        {/* Carousel Controls */}
-        <div className="flex justify-center gap-6 mt-12">
-          <button
-            onClick={() => setActiveIndex((prev) => (prev - 1 + defaultMembers.length) % defaultMembers.length)}
-            className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:scale-110 transition-all duration-300 group"
-            aria-label="Previous member"
+          {/* Hover instruction - desktop only */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            className="hidden md:block text-center mt-4 text-zinc-600 text-xs font-mono"
           >
-            <ChevronLeft className="w-6 h-6 text-zinc-400 group-hover:text-white" />
-          </button>
-          <button
-            onClick={() => setActiveIndex((prev) => (prev + 1) % defaultMembers.length)}
-            className="p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:scale-110 transition-all duration-300 group"
-            aria-label="Next member"
-          >
-            <ChevronRight className="w-6 h-6 text-zinc-400 group-hover:text-white" />
-          </button>
+            Hover over cards to slow down • Click to view details
+          </motion.p>
         </div>
       </div>
 
-      {/* Member Modal */}
+      {/* Enhanced Mobile-Optimized Member Modal */}
       <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-4xl bg-zinc-950/95 border-white/10 p-0 overflow-hidden backdrop-blur-2xl shadow-2xl sm:rounded-[2rem]">
+        <DialogContent
+          showCloseButton={false}
+          className="max-w-[95vw] sm:max-w-[90vw] md:max-w-3xl lg:max-w-4xl bg-zinc-950/98 border-emerald-500/30 p-0 overflow-hidden backdrop-blur-2xl shadow-2xl rounded-2xl sm:rounded-3xl max-h-[95vh] sm:max-h-[90vh]"
+        >
           <DialogTitle className="sr-only">Member Details</DialogTitle>
+
+          {/* Custom Close Button - Always Visible */}
+          <button
+            onClick={() => setSelectedMember(null)}
+            className="absolute top-3 right-3 md:top-4 md:right-4 z-50 p-2 md:p-2.5 rounded-full bg-zinc-900/90 border border-zinc-800 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all duration-300 group"
+          >
+            <X className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+          </button>
+
           {selectedMember && (
-            <div className="flex flex-col md:flex-row h-full md:h-[600px]">
-              <div className="w-full md:w-5/12 relative h-72 md:h-full bg-zinc-900">
-                <Image
-                  src={selectedMember.imageUrl}
-                  alt={selectedMember.name}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-zinc-950/90 via-transparent to-transparent" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+              className="flex flex-col md:flex-row h-full max-h-[95vh] sm:max-h-[90vh] md:h-[600px] overflow-y-auto md:overflow-hidden"
+            >
+              {/* Image Section - Mobile Optimized */}
+              <div className="w-full md:w-5/12 relative h-64 sm:h-80 md:h-full bg-zinc-900 flex-shrink-0 overflow-hidden">
+                <motion.div
+                  initial={{ scale: 1.2, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="relative w-full h-full"
+                >
+                  <Image
+                    src={selectedMember.imageUrl}
+                    alt={selectedMember.name}
+                    fill
+                    className="object-cover object-top"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                  />
+                </motion.div>
+                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-zinc-950 via-zinc-950/70 to-transparent" />
+
+                {/* Tech overlay */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_50%)]" />
+
+                {/* Floating sparkles - desktop only */}
+                <div className="hidden md:block">
+                  {[...Array(5)].map((_, i) => {
+                    // Use deterministic values based on index to prevent hydration errors
+                    const xEnd = (i * 61 % 100 - 50);
+                    const yEnd = (i * 79 % 100 - 50);
+                    const leftPos = (i * 43 % 100);
+                    const topPos = (i * 71 % 100);
+
+                    return (
+                      <motion.div
+                        key={i}
+                        className="absolute"
+                        initial={{ opacity: 0 }}
+                        animate={{
+                          opacity: [0, 1, 0],
+                          scale: [0, 1, 0],
+                          x: [0, xEnd],
+                          y: [0, yEnd],
+                        }}
+                        transition={{
+                          duration: 3,
+                          delay: i * 0.3,
+                          repeat: Infinity,
+                        }}
+                        style={{
+                          left: `${leftPos}%`,
+                          top: `${topPos}%`,
+                        }}
+                      >
+                        <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-emerald-400" />
+                      </motion.div>
+                    );
+                  })}
+                </div>
               </div>
 
-              <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center overflow-y-auto">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-4xl font-bold text-white tracking-tight">{selectedMember.name}</h3>
-                    <BadgeCheck className="w-7 h-7 text-emerald-400" />
-                  </div>
-                  <p className="text-xl text-emerald-400 font-medium mb-6">{selectedMember.role}</p>
+              {/* Content Section - Mobile Optimized */}
+              <div className="w-full md:w-7/12 p-6 sm:p-8 md:p-12 flex flex-col justify-center relative overflow-y-auto">
+                {/* Tech grid background */}
+                <div className="absolute inset-0 opacity-5">
+                  <TechGrid />
+                </div>
 
-                  <p className="text-zinc-300 leading-relaxed text-lg mb-10">
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="relative z-10"
+                >
+                  {/* Header */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 md:gap-3 mb-2">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight">
+                        {selectedMember.name}
+                      </h3>
+                      <BadgeCheck className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-emerald-400 flex-shrink-0" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Terminal className="w-3 h-3 md:w-4 md:h-4 text-emerald-500 flex-shrink-0" />
+                      <p className="text-sm sm:text-base md:text-lg text-emerald-400 font-mono">{selectedMember.role}</p>
+                    </div>
+                  </div>
+
+                  <p className="text-zinc-300 leading-relaxed text-sm sm:text-base md:text-lg mb-6 md:mb-8 border-l-2 border-emerald-500/50 pl-3 md:pl-4">
                     {selectedMember.expandedDescription}
                   </p>
 
-                  <div className="space-y-6 mb-10">
-                    <h4 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Expertise</h4>
-                    <div className="grid grid-cols-1 gap-4">
+                  {/* Technical Skills */}
+                  <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+                    <h4 className="text-xs md:text-sm font-bold text-emerald-400 uppercase tracking-widest font-mono flex items-center gap-2">
+                      <Zap className="w-3 h-3 md:w-4 md:h-4" />
+                      TECHNICAL_SKILLS
+                    </h4>
+                    <div className="flex flex-wrap gap-2 md:gap-3">
                       {selectedMember.skills.map((skill, idx) => (
-                        <div key={skill.name}>
-                          <div className="flex justify-between text-sm mb-2">
-                            <span className="text-zinc-200 font-medium">{skill.name}</span>
-                            <span className="text-emerald-400 font-mono">{skill.level}%</span>
+                        <motion.div
+                          key={skill}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{
+                            duration: 0.4,
+                            delay: 0.1 + (idx * 0.05),
+                            ease: [0.34, 1.56, 0.64, 1]
+                          }}
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          className="group relative"
+                        >
+                          <div className="px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-zinc-900/80 border border-emerald-500/30 backdrop-blur-sm hover:border-emerald-500/60 hover:bg-emerald-500/10 transition-all duration-300">
+                            <span className="text-xs md:text-sm font-medium text-zinc-200 group-hover:text-emerald-400 transition-colors">
+                              {skill}
+                            </span>
                           </div>
-                          <div className="h-2 w-full bg-zinc-800/50 rounded-full overflow-hidden">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${skill.level}%` }}
-                              transition={{ duration: 1, delay: 0.3 + (idx * 0.1), ease: "easeOut" }}
-                              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400"
-                            />
-                          </div>
-                        </div>
+                          {/* Glow effect on hover */}
+                          <motion.div
+                            className="absolute inset-0 rounded-lg pointer-events-none"
+                            initial={{ opacity: 0 }}
+                            whileHover={{
+                              opacity: 1,
+                              boxShadow: "0 0 20px rgba(16, 185, 129, 0.3)"
+                            }}
+                            transition={{ duration: 0.3 }}
+                          />
+                        </motion.div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
-                    <a href={`mailto:${selectedMember.contact.email}`} className="p-4 rounded-full bg-zinc-900/50 border border-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 transition-all duration-300">
-                      <Mail className="w-5 h-5" />
-                    </a>
-                    <a href={selectedMember.contact.linkedin} className="p-4 rounded-full bg-zinc-900/50 border border-white/5 hover:bg-blue-500/10 hover:border-blue-500/30 hover:text-blue-400 transition-all duration-300">
-                      <Linkedin className="w-5 h-5" />
-                    </a>
-                    <a href={selectedMember.contact.instagram} className="p-4 rounded-full bg-zinc-900/50 border border-white/5 hover:bg-pink-500/10 hover:border-pink-500/30 hover:text-pink-400 transition-all duration-300">
-                      <Instagram className="w-5 h-5" />
-                    </a>
+                  {/* Contact */}
+                  <div className="flex gap-2 md:gap-3">
+                    <motion.a
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      href={`mailto:${selectedMember.contact.email}`}
+                      className="p-3 md:p-4 rounded-xl bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all duration-300 group"
+                    >
+                      <Mail className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+                    </motion.a>
+                    <motion.a
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      href={selectedMember.contact.linkedin}
+                      className="p-3 md:p-4 rounded-xl bg-zinc-900/80 border border-zinc-800 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 group"
+                    >
+                      <Linkedin className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 group-hover:text-blue-400 transition-colors" />
+                    </motion.a>
+                    <motion.a
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      href={selectedMember.contact.instagram}
+                      className="p-3 md:p-4 rounded-xl bg-zinc-900/80 border border-zinc-800 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-300 group"
+                    >
+                      <Instagram className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 group-hover:text-pink-400 transition-colors" />
+                    </motion.a>
                   </div>
                 </motion.div>
               </div>
-            </div>
+            </motion.div>
           )}
         </DialogContent>
       </Dialog>
+
+      <style jsx global>{`
+        @keyframes gradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient {
+          background-size: 200% auto;
+          animation: gradient 3s ease infinite;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        
+        /* Smooth scrolling for all devices */
+        * {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Prevent layout shift on mobile */
+        @media (max-width: 768px) {
+          body {
+            overflow-x: hidden;
+          }
+        }
+      `}</style>
     </section>
   );
 }

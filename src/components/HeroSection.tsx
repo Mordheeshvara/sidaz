@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Code2 } from "lucide-react";
+import { TextDecode } from "@/components/ui/TextDecode";
 
 export interface HeroSectionProps {
   id?: string;
@@ -90,14 +91,14 @@ export default function HeroSection({
 
         {/* Main Heading */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight mb-8 leading-[1.1]"
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8"
         >
-          We Build <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-300 to-violet-500 animate-gradient-x">
-            Digital Legacies
+          Redefining <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-200 to-emerald-400 animate-gradient-x">
+            Digital Excellence
           </span>
         </motion.h1>
 
@@ -105,7 +106,7 @@ export default function HeroSection({
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ duration: 1, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
           className="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed"
         >
           Transforming visionary ideas into world-class digital experiences.
@@ -116,7 +117,7 @@ export default function HeroSection({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ duration: 1, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20"
         >
           <button
