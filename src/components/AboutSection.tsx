@@ -1,256 +1,206 @@
 "use client";
 
-import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Rocket, Target, Users, Zap } from "lucide-react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { Lightbulb, Target, Award, TrendingUp, Users, Globe, ArrowRight, Star, Sparkles, Heart, Trophy } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { useRef } from "react";
 
-export interface AboutSectionProps {
-  className?: string;
-}
-
-const timeline = [
-  { year: "2024", title: "The Spark", description: "Conceptualization of SIDAZ. Extensive market research and core team formation." },
-  { year: "2025", title: "The Launch", description: "Official incorporation and launch of operations. Establishing our global headquarters." },
-  { year: "Future", title: "Global Impact", description: "Scaling our innovations to empower businesses worldwide." },
-];
-
-const stats = [
-  { label: "Ideation", value: "2024", suffix: "" },
-  { label: "Launch", value: "2025", suffix: "" },
-  { label: "Vision", value: "∞", suffix: "" },
-  { label: "Passion", value: "100", suffix: "%" },
-];
-
-// Counter Component
-const Counter = ({ value, suffix }: { value: number, suffix: string }) => {
-  const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const [count, setCount] = React.useState(0);
-
-  React.useEffect(() => {
-    if (isInView) {
-      let start = 0;
-      const end = value;
-      const duration = 2000;
-      const increment = end / (duration / 16);
-
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          setCount(end);
-          clearInterval(timer);
-        } else {
-          setCount(Math.floor(start));
-        }
-      }, 16);
-      return () => clearInterval(timer);
-    }
-  }, [isInView, value]);
-
-  return <span ref={ref}>{count}{suffix}</span>;
-};
-
-export default function AboutSection({ className }: { className?: string }) {
-  const containerRef = useRef(null);
+export default function AboutSection() {
+  const ref = useRef(null);
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
+    target: ref,
+    offset: ["start end", "end start"]
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+  const values = [
+    {
+      icon: Rocket,
+      title: "Innovation First",
+      description: "Pushing boundaries with cutting-edge technology and creative solutions."
+    },
+    {
+      icon: Target,
+      title: "Results Driven",
+      description: "Focused on delivering measurable impact and exceeding expectations."
+    },
+    {
+      icon: Users,
+      title: "Client Focused",
+      description: "Your success is our mission. We build lasting partnerships."
+    },
+    {
+      icon: Zap,
+      title: "Speed & Quality",
+      description: "Fast delivery without compromising on excellence and precision."
+    }
+  ];
+
+  const founder = {
+    name: "Sarathy",
+    role: "Founder",
+    image: "/images/team/founder .jpeg",
+    bio: "Visionary entrepreneur who founded SIDAZ with a mission to revolutionize digital experiences through cutting-edge technology and exceptional design. With a passion for innovation and excellence, Sarathy leads the company towards transforming ideas into reality."
+  };
 
   return (
-    <section ref={containerRef} className={cn("relative w-full py-32 overflow-hidden bg-slate-950", className)}>
-      {/* Background Elements - Gold/Amber Theme */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-950 via-[#1a1500] to-slate-950" />
-        <motion.div
-          style={{ y }}
-          className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-amber-500/5 rounded-full blur-[120px]"
-        />
-        <motion.div
-          style={{ y: useTransform(scrollYProgress, [0, 1], [-100, 100]) }}
-          className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-yellow-600/5 rounded-full blur-[100px]"
-        />
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
+    <section
+      ref={ref}
+      id="about"
+      className="relative w-full min-h-screen flex items-center justify-center py-32 overflow-hidden"
+    >
+      <div className="container mx-auto px-4 z-10">
         {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-24">
+        <motion.div
+          style={{ opacity }}
+          className="text-center max-w-4xl mx-auto mb-20"
+        >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6"
           >
-            <Sparkles className="w-4 h-4" />
-            <span>Our Story</span>
+            <span className="text-sm font-medium text-violet-400">About Us</span>
           </motion.div>
 
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold mb-8 text-white leading-tight"
+            className="text-5xl md:text-7xl font-black tracking-tight mb-8"
           >
-            Born in 2024. <br />
-            <span className="text-gradient-gold animate-pulse-glow">
-              Launching the Future in 2025.
+            <span className="text-white">Transforming Ideas</span>
+            <br />
+            <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              Into Reality
             </span>
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
             className="text-xl text-zinc-400 leading-relaxed"
           >
-            SIDAZ isn't just a company; it's a movement. Conceived in 2024 with a vision to redefine digital excellence, we are hitting the ground running in 2025. We blend American design principles with cutting-edge technology to build brands that don't just exist—they dominate.
+            We're a team of passionate developers, designers, and innovators
+            dedicated to building exceptional digital experiences. Founded in 2024,
+            we've rapidly grown into a trusted partner for businesses worldwide.
           </motion.p>
-        </div>
+        </motion.div>
 
-        {/* Bento Grid Layout */}
+        {/* Founder Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="max-w-5xl mx-auto mb-20"
+        >
+          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 backdrop-blur-md overflow-hidden group">
+            {/* Glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/0 to-fuchsia-500/0 group-hover:from-violet-500/10 group-hover:to-fuchsia-500/10 transition-all duration-500" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-          {/* Mission Card - Large */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-2 h-full"
-          >
-            <SpotlightCard className="h-full p-8 relative group hover:bg-zinc-900/80 transition-colors duration-500" spotlightColor="rgba(245, 158, 11, 0.2)">
-              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
-                <Target className="w-32 h-32 text-amber-500" />
-              </div>
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6">
-                  <Target className="w-6 h-6 text-amber-400" />
+            <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+              {/* Founder Image */}
+              <div className="md:col-span-1">
+                <div className="relative w-48 h-48 mx-auto">
+                  <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
+                  <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/20 group-hover:border-violet-500/50 transition-all">
+                    <Image
+                      src="/images/team/founder .jpeg" // Matches actual filename
+                      alt={founder.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">Our Mission</h3>
-                <p className="text-zinc-400 text-lg leading-relaxed max-w-xl">
-                  To empower businesses with digital solutions that are as beautiful as they are functional. We strip away the noise to deliver pure, high-impact results that drive growth and engagement.
+              </div>
+
+              {/* Founder Details */}
+              <div className="md:col-span-2 text-center md:text-left">
+                <h3 className="text-3xl font-bold text-white mb-2">
+                  {founder.name}
+                </h3>
+                <p className="text-lg text-violet-400 font-semibold mb-4">
+                  {founder.role}
+                </p>
+                <p className="text-zinc-300 leading-relaxed">
+                  {founder.bio}
                 </p>
               </div>
-            </SpotlightCard>
-          </motion.div>
+            </div>
+          </div>
+        </motion.div>
 
-          {/* Stats Card */}
-          <motion.div
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="md:col-span-1 h-full"
-          >
-            <SpotlightCard className="h-full p-8 relative group hover:bg-zinc-900/80 transition-colors duration-500" spotlightColor="rgba(245, 158, 11, 0.2)">
-              <div className="grid grid-cols-1 gap-8 h-full content-center">
-                <div>
-                  <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
-                    <Heart className="w-5 h-5 text-amber-400" />
-                  </div>
-                  <h4 className="text-lg font-bold text-white mb-2">Passion</h4>
-                  <p className="text-sm text-zinc-400">We love what we do, and it shows in every line of code.</p>
-                </div>
-                <div>
-                  <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
-                    <Trophy className="w-5 h-5 text-amber-400" />
-                  </div>
-                  <h4 className="text-lg font-bold text-white mb-2">Excellence</h4>
-                  <p className="text-sm text-zinc-400">Good enough is never enough. We aim for perfection.</p>
-                </div>
-                <div>
-                  <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
-                    <Users className="w-5 h-5 text-amber-400" />
-                  </div>
-                  <h4 className="text-lg font-bold text-white mb-2">Partnership</h4>
-                  <p className="text-sm text-zinc-400">We don't just work for you; we work with you.</p>
-                </div>
+        {/* Values Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-20">
+          {values.map((value, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+              className="group relative p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 hover:border-violet-500/50 transition-all duration-500"
+            >
+              {/* Icon */}
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <value.icon className="w-7 h-7 text-white" />
               </div>
-            </SpotlightCard>
-          </motion.div>
+
+              {/* Content */}
+              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-violet-400 transition-colors">
+                {value.title}
+              </h3>
+              <p className="text-zinc-400 leading-relaxed group-hover:text-zinc-300 transition-colors">
+                {value.description}
+              </p>
+
+              {/* Glow Effect */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-violet-500/0 to-fuchsia-500/0 group-hover:from-violet-500/10 group-hover:to-fuchsia-500/10 transition-all duration-500 -z-10" />
+            </motion.div>
+          ))}
         </div>
 
-        {/* Timeline */}
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-white mb-4">Our Journey</h3>
-            <div className="h-1 w-20 bg-amber-500 mx-auto rounded-full" />
-          </div>
-
-          <div className="relative">
-            {/* Vertical Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gradient-to-b from-transparent via-amber-500/50 to-transparent" />
-
-            <div className="space-y-24">
-              {timeline.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
-                  className={cn(
-                    "relative flex items-center justify-between",
-                    index % 2 === 0 ? "flex-row" : "flex-row-reverse"
-                  )}
-                >
-                  {/* Content */}
-                  <div className={cn("w-[45%]", index % 2 === 0 ? "text-right" : "text-left")}>
-                    <span className="text-5xl font-bold text-white/5 absolute -top-10 select-none pointer-events-none transition-colors group-hover:text-amber-500/10">
-                      {item.year}
-                    </span>
-                    <h4 className="text-2xl font-bold text-white mb-2 relative z-10">{item.title}</h4>
-                    <p className="text-zinc-400 leading-relaxed relative z-10">{item.description}</p>
-                  </div>
-
-                  {/* Center Dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-amber-500 border-4 border-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.5)] z-10" />
-
-                  {/* Empty Space for Balance */}
-                  <div className="w-[45%]" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Founder Quote */}
+        {/* Story Section - Timeline Layout */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-20 relative p-12 rounded-3xl bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 text-center overflow-hidden"
+          transition={{ delay: 0.4 }}
+          className="max-w-4xl mx-auto"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
-          <Star className="w-8 h-8 text-amber-400 mx-auto mb-6" />
-          <blockquote className="text-2xl md:text-3xl font-light italic text-zinc-200 mb-8 max-w-4xl mx-auto leading-relaxed">
-            "We don't just write code; we write the future. Every line is a promise of quality, every pixel a commitment to excellence."
-          </blockquote>
-          <div className="flex flex-col items-center relative z-10">
-            <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-amber-500/30 shadow-[0_0_60px_rgba(245,158,11,0.3)] mb-8 overflow-hidden group">
-              <div className="absolute inset-0 rounded-full border-4 border-amber-500/50 animate-pulse-glow-emerald opacity-50" />
-              <Image
-                src="/images/team/founder .jpeg"
-                alt="Founder"
-                fill
-                priority
-                sizes="(max-width: 768px) 256px, 320px"
-                quality={95}
-                className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-              />
-              {/* Backdrop blur effect - creates depth and focus */}
-              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/40 pointer-events-none" />
-              {/* Subtle vignette for professional look */}
-              <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.3)] pointer-events-none rounded-full" />
+          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 backdrop-blur-md overflow-hidden">
+            <h3 className="text-3xl font-bold text-white mb-12 text-center">
+              Our Journey
+            </h3>
+
+            <div className="relative border-l-2 border-white/10 ml-6 md:ml-12 space-y-12">
+              {/* 2024 */}
+              <div className="relative pl-8 md:pl-12">
+                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-violet-500 ring-4 ring-black" />
+                <h4 className="text-2xl font-bold text-white mb-2">2024</h4>
+                <p className="text-violet-400 font-semibold mb-2">Ideation & Inception</p>
+                <p className="text-zinc-400 leading-relaxed">
+                  Born from a vision to revolutionize digital experiences through innovative technology and exceptional design. We assembled our core team of visionaries and started building the foundation.
+                </p>
+              </div>
+
+              {/* 2025 */}
+              <div className="relative pl-8 md:pl-12">
+                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-cyan-400 ring-4 ring-black animate-pulse" />
+                <h4 className="text-2xl font-bold text-white mb-2">2025</h4>
+                <p className="text-cyan-400 font-semibold mb-2">Global Launch</p>
+                <p className="text-zinc-400 leading-relaxed">
+                  Ready to transform businesses worldwide with our cutting-edge solutions. We are scaling our operations and launching our flagship products to the global market.
+                </p>
+              </div>
             </div>
-            <cite className="text-3xl font-bold text-white not-italic mb-2">Sarathy</cite>
-            <span className="text-amber-400 font-medium tracking-widest uppercase text-sm">Founder</span>
           </div>
         </motion.div>
       </div>

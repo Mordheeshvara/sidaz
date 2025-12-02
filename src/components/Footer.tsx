@@ -2,427 +2,151 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Linkedin, Contact, Layers2, Columns4, Instagram, Mail, ArrowRight, Sparkles } from "lucide-react";
+import { Linkedin, Twitter, Instagram, Mail, ArrowRight, Sparkles, Send, Globe, MapPin, Phone } from "lucide-react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import AnimatedLogo from "@/components/AnimatedLogo";
 
 type FooterLink = {
   label: string;
   href: string;
 };
 
-export interface FooterProps {
-  className?: string;
-  companyName?: string;
-  tagline?: string;
-  address?: string;
-  email?: string;
-  phone?: string;
-  socials?: {
-    linkedin?: string;
-  };
-  navLinks?: FooterLink[];
-  services?: string[];
-  currentYear?: number;
-}
-
 const defaultNav: FooterLink[] = [
   { label: "About", href: "/#about" },
   { label: "Services", href: "/#services" },
   { label: "Portfolio", href: "/#portfolio" },
-  { label: "Testimonials", href: "/#testimonials" },
   { label: "Team", href: "/#team" },
   { label: "Contact", href: "/#contact" },
 ];
 
 const defaultServices = [
+  "Web Development",
+  "Mobile Apps",
   "UI/UX Design",
-  "Next.js Development",
-  "Design Systems",
-  "Performance Optimization",
-  "Accessibility Audits",
-  "Brand Identity",
+  "Cloud Solutions",
+  "AI Integration",
+  "Blockchain",
 ];
 
-const Footer: React.FC<FooterProps> = ({
-  className,
-  companyName = "SIDAZ",
-  tagline = "Crafting delightful experiences with code and design.",
-  address = "Worldwide • Remote-first",
-  email = "sidaztechnologies@gmail.com",
-  phone = "+91 9514332052",
-  socials = { linkedin: "https://www.linkedin.com" },
-  navLinks = defaultNav,
-  services = defaultServices,
-  currentYear,
-}) => {
-  const year = currentYear ?? new Date().getFullYear();
+export default function Footer() {
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer
-      className={clsx(
-        "relative w-full overflow-hidden",
-        "bg-gradient-to-br from-slate-950 via-emerald-950/20 to-slate-950",
-        className
-      )}
-      aria-labelledby="site-footer-heading"
-    >
-      {/* Animated Background Gradients */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl"
-          animate={{
-            x: [-50, 50, -50],
-            y: [-50, 50, -50],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
+    <footer className="relative w-full overflow-hidden bg-black border-t border-white/5 pt-20 pb-10">
+      {/* Subtle Background Glow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-violet-500/5 rounded-full blur-[120px] opacity-50" />
       </div>
 
-      {/* Glowing Top Border */}
-      <div className="relative">
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50" />
-        <motion.div
-          className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-teal-500 via-emerald-500 to-amber-500"
-          animate={{
-            opacity: [0.3, 0.8, 0.3],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      </div>
-
-      <div className="container relative z-10 w-full max-w-full py-16 sm:py-20">
-        {/* Header Section with Gradient */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div className="min-w-0">
-              <h2
-                id="site-footer-heading"
-                className="font-heading text-3xl sm:text-4xl md:text-5xl tracking-tight bg-gradient-to-r from-white via-emerald-200 to-teal-200 bg-clip-text text-transparent"
-              >
-                {companyName}
-              </h2>
-              <p className="mt-2 text-base sm:text-lg text-emerald-200/80 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-400" />
-                {tagline}
-              </p>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-20">
+          {/* Brand Column (4 cols) */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link href="/" className="inline-block">
+              <AnimatedLogo size="md" showParticles={true} />
+            </Link>
+            <p className="text-zinc-400 leading-relaxed max-w-sm">
+              Crafting award-winning digital experiences that merge art with technology. We build the future, pixel by pixel.
+            </p>
+            <div className="flex gap-4 pt-2">
+              {[
+                {
+                  icon: Linkedin,
+                  href: "https://www.linkedin.com/company/sidaz/",
+                  color: "#0A66C2",
+                  className: "hover:text-[#0A66C2] hover:border-[#0A66C2]/30"
+                },
+                {
+                  icon: Instagram,
+                  href: "https://www.instagram.com/sida.technologies/?hl=en",
+                  color: "#E4405F",
+                  className: "hover:text-[#E4405F] hover:border-[#E4405F]/30"
+                },
+                {
+                  icon: Mail,
+                  href: "sidaztechnologies@gmail.com",
+                  color: "#10b981",
+                  className: "hover:text-violet-500 hover:border-violet-500/30"
+                }
+              ].map((social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.href}
+                  whileHover={{ y: -3, color: social.color }}
+                  className={`w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-400 transition-colors hover:bg-white/5 ${social.className}`}
+                >
+                  <social.icon className="w-4 h-4" />
+                </motion.a>
+              ))}
             </div>
           </div>
-        </motion.div>
 
-        {/* Main Content Grid with Glassmorphic Cards */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
-          {/* Company Info Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="group relative rounded-2xl bg-gradient-to-br from-emerald-500/10 via-transparent to-teal-500/10 p-6 backdrop-blur-sm border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300"
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <h3 className="font-heading text-sm uppercase tracking-wider text-emerald-300 mb-4 flex items-center gap-2">
-              <Layers2 className="w-4 h-4" />
-              Company
-            </h3>
-            <p className="text-sm leading-relaxed text-gray-300 mb-4 relative z-10">
-              SIDAZ combines strategic thinking, innovative design, and expert engineering to build fast, accessible, and visually stunning digital experiences.
-            </p>
-            <ul className="space-y-3 relative z-10">
-              <li className="flex items-center gap-2 text-sm text-gray-400 hover:text-emerald-300 transition-colors">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/20">
-                  <Layers2 className="h-3.5 w-3.5 text-emerald-400" />
-                </span>
-                {address}
-              </li>
-              <li>
-                <a
-                  href={`mailto:${email}`}
-                  className="flex items-center gap-2 text-sm text-gray-400 hover:text-emerald-300 transition-colors group/link"
-                >
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/20 group-hover/link:bg-emerald-500/30">
-                    <Mail className="h-3.5 w-3.5 text-emerald-400" />
-                  </span>
-                  {email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`tel:${phone.replace(/[^\\d+]/g, "")}`}
-                  className="flex items-center gap-2 text-sm text-gray-400 hover:text-emerald-300 transition-colors"
-                >
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/20">
-                    <Contact className="h-3.5 w-3.5 text-emerald-400" />
-                  </span>
-                  {phone}
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-
-          {/* Quick Links Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="group relative rounded-2xl bg-gradient-to-br from-teal-500/10 via-transparent to-emerald-500/10 p-6 backdrop-blur-sm border border-teal-500/20 hover:border-teal-500/40 transition-all duration-300"
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <h3 className="font-heading text-sm uppercase tracking-wider text-teal-300 mb-4 flex items-center gap-2">
-              <Columns4 className="w-4 h-4" />
-              Quick Links
-            </h3>
-            <ul className="grid grid-cols-2 gap-2 relative z-10">
-              {navLinks.map((link, index) => (
-                <motion.li
-                  key={link.href}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
-                >
-                  <a
+          {/* Links Column (2 cols) */}
+          <div className="lg:col-span-2">
+            <h3 className="font-bold text-white mb-6 text-lg">Company</h3>
+            <ul className="space-y-4">
+              {defaultNav.map((link) => (
+                <li key={link.label}>
+                  <Link
                     href={link.href}
-                    className="group/link flex items-center gap-2 text-sm text-gray-400 hover:text-teal-300 transition-all duration-200"
+                    className="text-zinc-400 hover:text-violet-400 transition-colors flex items-center gap-2 group text-sm font-medium"
                   >
-                    <ArrowRight className="w-3 h-3 text-teal-400 opacity-0 group-hover/link:opacity-100 -translate-x-2 group-hover/link:translate-x-0 transition-all duration-200" />
-                    <span className="group-hover/link:translate-x-1 transition-transform duration-200">{link.label}</span>
-                  </a>
-                </motion.li>
+                    {link.label}
+                    <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
               ))}
             </ul>
-          </motion.div>
+          </div>
 
-          {/* Services Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="group relative rounded-2xl bg-gradient-to-br from-amber-500/10 via-transparent to-emerald-500/10 p-6 backdrop-blur-sm border border-amber-500/20 hover:border-amber-500/40 transition-all duration-300"
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <h3 className="font-heading text-sm uppercase tracking-wider text-amber-300 mb-4 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              Services
-            </h3>
-            <ul className="space-y-2 relative z-10">
-              {services.map((svc, index) => (
-                <motion.li
-                  key={svc}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-                  className="flex items-start gap-2 text-sm text-gray-400 hover:text-amber-300 transition-colors group/item cursor-pointer"
-                >
-                  <span className="mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-md bg-amber-500/20 group-hover/item:bg-amber-500/30 transition-colors">
-                    <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                  </span>
-                  <span className="group-hover/item:translate-x-1 transition-transform duration-200">{svc}</span>
-                </motion.li>
+          {/* Services Column (3 cols) */}
+          <div className="lg:col-span-3">
+            <h3 className="font-bold text-white mb-6 text-lg">Services</h3>
+            <ul className="space-y-4">
+              {defaultServices.map((service) => (
+                <li key={service} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer text-sm font-medium">
+                  {service}
+                </li>
               ))}
             </ul>
-          </motion.div>
+          </div>
 
-          {/* Social Media Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="group relative rounded-2xl bg-gradient-to-br from-emerald-500/10 via-transparent to-amber-500/10 p-6 backdrop-blur-sm border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300"
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <h3 className="font-heading text-sm uppercase tracking-wider text-emerald-300 mb-4 flex items-center gap-2">
-              <Contact className="w-4 h-4" />
-              Connect With Us
-            </h3>
-            <p className="text-sm text-gray-300 mb-6 relative z-10">
-              Follow us on social media and stay updated with our latest projects and insights.
-            </p>
-
-            {/* Animated Social Icons */}
-            <div className="flex gap-3 relative z-10">
-              <motion.a
-                href="https://www.linkedin.com/company/sidaz"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="group/social relative p-4 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300"
-                aria-label="Follow us on LinkedIn"
-              >
-                <Linkedin className="h-6 w-6 text-blue-300 group-hover/social:text-blue-200 transition-colors relative z-10" />
-                <motion.div
-                  className="absolute inset-0 rounded-xl bg-blue-500/20 blur-xl"
-                  animate={{
-                    opacity: [0, 0.5, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-              </motion.a>
-
-              <motion.a
-                href="https://www.instagram.com/sida.technologies/?hl=en"
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                whileTap={{ scale: 0.95 }}
-                className="group/social relative p-4 rounded-xl bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-orange-500/20 hover:from-pink-500/30 hover:via-purple-500/30 hover:to-orange-500/30 border border-pink-500/30 hover:border-pink-400/50 transition-all duration-300"
-                aria-label="Follow us on Instagram"
-              >
-                <Instagram className="h-6 w-6 text-pink-300 group-hover/social:text-pink-200 transition-colors relative z-10" />
-                <motion.div
-                  className="absolute inset-0 rounded-xl bg-pink-500/20 blur-xl"
-                  animate={{
-                    opacity: [0, 0.5, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5
-                  }}
-                />
-              </motion.a>
-
-              <motion.a
-                href="mailto:sidaztechnologies@gmail.com"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                className="group/social relative p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-600/20 hover:from-emerald-500/30 hover:to-teal-600/30 border border-emerald-500/30 hover:border-emerald-400/50 transition-all duration-300"
-                aria-label="Send us an email"
-              >
-                <Mail className="h-6 w-6 text-emerald-300 group-hover/social:text-emerald-200 transition-colors relative z-10" />
-                <motion.div
-                  className="absolute inset-0 rounded-xl bg-emerald-500/20 blur-xl"
-                  animate={{
-                    opacity: [0, 0.5, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1
-                  }}
-                />
-              </motion.a>
-            </div>
-          </motion.div>
+          {/* Contact Column (3 cols) */}
+          <div className="lg:col-span-3">
+            <h3 className="font-bold text-white mb-6 text-lg">Contact</h3>
+            <ul className="space-y-6">
+              <li className="flex items-start gap-3 text-zinc-400 text-sm">
+                <MapPin className="w-5 h-5 text-violet-500 shrink-0 mt-0.5" />
+                <span>
+                  No.10, rangasamy nagar extenion,thattanchavady,
+                  Villianur,pondicherry 605110
+                </span>
+              </li>
+              <li className="flex items-center gap-3 text-zinc-400 text-sm">
+                <Phone className="w-5 h-5 text-violet-500 shrink-0" />
+                <span>+91 95143 32052</span>
+              </li>
+              <li className="flex items-center gap-3 text-zinc-400 text-sm">
+                <Mail className="w-5 h-5 text-violet-500 shrink-0" />
+                <span>sidaztechnologies@gmail.com </span>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        {/* Animated Divider */}
-        <motion.div
-          className="relative mb-8"
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-        >
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
-          <motion.div
-            className="absolute inset-0 h-px bg-gradient-to-r from-teal-500 via-emerald-500 to-amber-500"
-            animate={{
-              opacity: [0.2, 0.6, 0.2],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        </motion.div>
-
-        {/* Bottom Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center"
-        >
-          <p className="text-sm text-gray-400">
-            © 2025 <span className="text-emerald-300 font-semibold">{companyName}</span>. All rights reserved.
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-zinc-500 text-sm font-medium">
+            © {currentYear} SIDAZ Technologies. All rights reserved.
           </p>
-
-          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-            <li>
-              <Link
-                href="/#privacy"
-                className="text-gray-400 hover:text-emerald-300 transition-colors relative group/link"
-              >
-                Privacy Policy
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover/link:w-full transition-all duration-300" />
-              </Link>
-            </li>
-            <li className="text-gray-600">•</li>
-            <li>
-              <Link
-                href="/#terms"
-                className="text-gray-400 hover:text-emerald-300 transition-colors relative group/link"
-              >
-                Terms of Service
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover/link:w-full transition-all duration-300" />
-              </Link>
-            </li>
-            <li className="text-gray-600">•</li>
-            <li>
-              <Link
-                href="/#contact"
-                className="text-gray-400 hover:text-emerald-300 transition-colors relative group/link"
-              >
-                Contact
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 group-hover/link:w-full transition-all duration-300" />
-              </Link>
-            </li>
-          </ul>
-        </motion.div>
+          <div className="flex gap-8 text-sm font-medium text-zinc-500">
+            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-white transition-colors">Cookies</Link>
+          </div>
+        </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

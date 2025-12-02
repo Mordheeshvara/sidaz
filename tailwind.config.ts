@@ -122,11 +122,11 @@ module.exports = {
                 },
                 "pulse-glow": {
                     "0%, 100%": {
-                        boxShadow: "0 0 20px rgba(16, 185, 129, 0.3)",
+                        boxShadow: "0 0 20px rgba(102, 51, 153, 0.4)",
                         transform: "scale(1)"
                     },
                     "50%": {
-                        boxShadow: "0 0 40px rgba(16, 185, 129, 0.6)",
+                        boxShadow: "0 0 40px rgba(102, 51, 153, 0.7)",
                         transform: "scale(1.05)"
                     },
                 },

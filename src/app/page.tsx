@@ -8,67 +8,48 @@ import PortfolioSection from "@/components/PortfolioSection";
 import TeamSection from "@/components/TeamSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import BackgroundEffects from "@/components/BackgroundEffects";
 
 export default function HomePage() {
-  const handleGetStarted = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      const elementPosition = contactSection.offsetTop;
-      const offsetPosition = elementPosition - 80;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  const handleViewPortfolio = () => {
-    const portfolioSection = document.getElementById('portfolio');
-    if (portfolioSection) {
-      portfolioSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <main className="min-h-screen bg-background">
-      <Navigation />
+    <>
+      {/* 2D Background Effects */}
+      <BackgroundEffects />
 
-      {/* Hero Section */}
-      <HeroSection
-        id="home"
-        primaryHref="#contact"
-        secondaryHref="#portfolio"
-        onPrimaryClick={undefined}
-        onSecondaryClick={handleViewPortfolio}
-      />
+      <main className="min-h-screen bg-slate-950 relative z-10 contain-section">
+        <Navigation />
 
-      {/* About Section */}
-      <div id="about" className="scroll-mt-20">
-        <AboutSection />
-      </div>
+        {/* Hero Section */}
+        <HeroSection />
 
-      {/* Services Section */}
-      <div id="services" className="scroll-mt-20">
-        <ServicesSection />
-      </div>
+        {/* About Section */}
+        <div id="about" className="scroll-mt-20 gpu-accelerate">
+          <AboutSection />
+        </div>
 
-      {/* Portfolio Section */}
-      <div id="portfolio" className="scroll-mt-20">
-        <PortfolioSection />
-      </div>
+        {/* Services Section */}
+        <div id="services" className="scroll-mt-20 gpu-accelerate">
+          <ServicesSection />
+        </div>
 
-      {/* Team Section */}
-      <div id="team" className="scroll-mt-20">
-        <TeamSection />
-      </div>
+        {/* Portfolio Section */}
+        <div id="portfolio" className="scroll-mt-20 gpu-accelerate">
+          <PortfolioSection />
+        </div>
 
-      {/* Contact Section */}
-      <div id="contact" className="scroll-mt-20">
-        <ContactSection />
-      </div>
+        {/* Team Section */}
+        <div id="team" className="scroll-mt-20 gpu-accelerate">
+          <TeamSection />
+        </div>
 
-      {/* Footer */}
-      <Footer />
-    </main>
+        {/* Contact Section */}
+        <div id="contact" className="scroll-mt-20 gpu-accelerate">
+          <ContactSection />
+        </div>
+
+        {/* Footer */}
+        <Footer />
+      </main>
+    </>
   );
 }

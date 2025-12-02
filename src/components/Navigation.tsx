@@ -2,11 +2,12 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronRight, Sparkles } from "lucide-react";
+import { Menu, ChevronRight, Sparkles } from "lucide-react";
 import clsx from "clsx";
-import { motion } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import Image from "next/image";
+import AnimatedLogo from "@/components/AnimatedLogo";
 
 type NavItem = {
   id: string;
@@ -32,20 +33,21 @@ const DEFAULT_LINKS: NavItem[] = [
 
 function GlassLogo() {
   return (
-    <div
-      aria-hidden="true"
-      className="relative inline-flex items-center justify-center h-8 w-16 sm:h-10 sm:w-20 md:h-12 md:w-24 rounded-lg overflow-hidden transition-all duration-200 hover:scale-105 active:scale-95"
-    >
+    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
       <Image
         src="/logo.png"
         alt="SIDAZ Logo"
-        width={80}
-        height={48}
-        className="w-full h-full object-contain"
+        width={64}
+        height={64}
+        className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
         priority
-        sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
+      />
+      {/* Glow effect */}
+      <div
+        className="absolute inset-0 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"
         style={{
-          filter: 'drop-shadow(0 4px 12px rgba(155, 140, 255, 0.5))',
+          background: 'radial-gradient(circle, rgba(102, 51, 153, 0.3), transparent 70%)',
+          filter: 'blur(12px)',
         }}
       />
     </div>
@@ -60,68 +62,62 @@ export default function Navigation({
   scrollOffset = 80,
 }: NavigationProps) {
   const [activeId, setActiveId] = useState<string>(links[0]?.id ?? "");
-  const [isMounted, setIsMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isServicesVisible, setIsServicesVisible] = useState(false);
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    setIsMounted(true);
+  // OPTIMIZED: Use Framer Motion's optimized scroll handler
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const isScrolled = latest > 20;
+    if (isScrolled !== scrolled) setScrolled(isScrolled);
+  });
 
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+  // OPTIMIZED: Use IntersectionObserver for active section detection instead of scroll listener
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Throttled scroll handler for active section detection
-    let timeoutId: NodeJS.Timeout | null = null;
-
-    const onScrollTopCheck = () => {
-      if (timeoutId) return;
-
-      timeoutId = setTimeout(() => {
-        timeoutId = null;
-        const headerLine = scrollOffset;
-        const sectionIds = links.map((l) => l.id);
-
-        // Optimized: Only query elements once per check
-        const sections = sectionIds
-          .map((id) => document.getElementById(id))
-          .filter((el): el is HTMLElement => !!el);
-
-        let current: HTMLElement | null = null;
-        let currentTop = -Infinity;
-
-        // Find the section currently in view
-        for (const s of sections) {
-          const rect = s.getBoundingClientRect();
-          // Check if section is roughly in view (top is above header line)
-          if (rect.top - headerLine <= 100) {
-            if (rect.top > currentTop) {
-              currentTop = rect.top;
-              current = s;
-            }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
           }
-        }
+        });
+      },
+      {
+        rootMargin: "-50% 0px -50% 0px", // Trigger when section is in middle of viewport
+        threshold: 0,
+      }
+    );
 
-        const targetId = current?.id || links[0]?.id;
-        if (targetId && targetId !== activeId) setActiveId(targetId);
-      }, 100); // Check every 100ms instead of every frame
-    };
+    links.forEach((link) => {
+      const element = document.getElementById(link.id);
+      if (element) observer.observe(element);
+    });
 
-    window.addEventListener("scroll", onScrollTopCheck, { passive: true });
-    // Initial check
-    onScrollTopCheck();
+    return () => observer.disconnect();
+  }, [links]);
 
-    return () => {
-      window.removeEventListener("scroll", onScrollTopCheck);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [links, activeId, scrollOffset]);
+  // OPTIMIZED: Dedicated observer for Services section to hide navbar
+  useEffect(() => {
+    const servicesSection = document.getElementById('services');
+    if (!servicesSection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsServicesVisible(entry.isIntersecting);
+        });
+      },
+      {
+        rootMargin: "0px", // Exact viewport intersection
+        threshold: 0.1 // Trigger when 10% of services is visible
+      }
+    );
+
+    observer.observe(servicesSection);
+    return () => observer.disconnect();
+  }, []);
 
   const handleScrollTo = useCallback(
     (id: string) => {
@@ -153,7 +149,7 @@ export default function Navigation({
             "text-sm font-medium transition-all duration-300 touch-manipulation",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/60",
             isActive
-              ? "text-white bg-gradient-to-r from-violet-600 to-fuchsia-600 shadow-[0_0_20px_rgba(124,58,237,0.5)]"
+              ? "text-white bg-gradient-to-r from-violet-600 to-fuchsia-600 shadow-[0_0_20px_rgba(102,51,153,0.5)]"
               : "text-gray-300 hover:text-white hover:bg-white/5"
           )}
           aria-current={isActive ? "page" : undefined}
@@ -183,61 +179,28 @@ export default function Navigation({
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={clsx(
         "fixed top-0 inset-x-0 z-50",
-        "backdrop-blur-md", // Reduced blur for performance
-        "border-b transition-all duration-300 will-change-transform",
-        scrolled
-          ? "border-purple-500/30 bg-slate-950/90"
-          : "border-purple-500/10 bg-slate-950/60",
+        "backdrop-blur-md supports-[backdrop-filter]:bg-black/20 bg-black/50",
+        "border-b border-white/5 transition-all duration-300",
+        isServicesVisible ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100",
         className || ""
       )}
       style={style}
     >
-      {/* Animated Background Gradients - Optimized */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute -top-20 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl will-change-transform"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute -top-20 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl will-change-transform"
-          animate={{
-            x: [0, -50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      </div>
+      {/* OPTIMIZED: Removed infinite background animations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30" >
+        <div className="absolute -top-20 left-1/4 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute -top-20 right-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
+      </div >
 
       <div className="container w-full max-w-full relative z-10">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left: Logo */}
           <Link
             href="/"
-            className="group flex items-center gap-2 sm:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/60 rounded-lg p-1 -m-1 min-w-0 flex-shrink-0"
-            aria-label="Go to homepage"
+            className="group flex items-center gap-2 sm:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/60 rounded-lg p-1 ml-2 sm:ml-4 min-w-0 flex-shrink-0"
+            aria-label="SIDAZ - Go to homepage"
           >
             {logo ?? <GlassLogo />}
-            <div className="flex flex-col min-w-0 hidden xs:flex">
-              <span className="font-heading text-xs sm:text-sm md:text-base tracking-tight bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent truncate">
-                SIDAZ
-              </span>
-              <span className="text-[9px] sm:text-[10px] md:text-xs text-purple-300/70 -mt-0.5 truncate flex items-center gap-1">
-                <Sparkles className="w-2 h-2" />
-                Design & Engineering
-              </span>
-            </div>
           </Link>
 
           {/* Desktop Nav */}
@@ -255,34 +218,25 @@ export default function Navigation({
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   aria-label="Open menu"
-                  className="lg:hidden h-8 w-8 sm:h-9 sm:w-9 p-0 rounded-lg bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-400/30 flex items-center justify-center"
+                  className="lg:hidden h-8 w-8 sm:h-9 sm:w-9 p-0 rounded-lg bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border border-violet-400/30 flex items-center justify-center"
                 >
-                  <Menu className="h-4 w-4 sm:h-5 sm:w-5 text-purple-200" aria-hidden="true" />
+                  <Menu className="h-4 w-4 sm:h-5 sm:w-5 text-violet-200" aria-hidden="true" />
                 </motion.button>
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[90vw] max-w-sm bg-gradient-to-br from-slate-950 via-purple-950/20 to-slate-950 backdrop-blur-md border-l border-purple-500/30 p-0 flex flex-col"
+                className="w-[90vw] max-w-sm bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 backdrop-blur-md border-l border-violet-500/30 p-0 flex flex-col"
                 aria-label="Mobile menu"
               >
                 {/* Mobile Menu Background */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl" />
-                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl" />
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
                 </div>
 
-                <div className="p-4 border-b border-purple-500/20 flex-shrink-0 relative z-10">
-                  <div className="flex items-center gap-3">
+                <div className="p-4 border-b border-violet-500/20 flex-shrink-0 relative z-10">
+                  <div className="flex items-center justify-center">
                     {logo ?? <GlassLogo />}
-                    <div className="flex flex-col min-w-0">
-                      <span className="font-heading text-base tracking-tight bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
-                        SIDAZ
-                      </span>
-                      <span className="text-xs text-purple-300/70 -mt-0.5 flex items-center gap-1">
-                        <Sparkles className="w-2 h-2" />
-                        Design & Engineering
-                      </span>
-                    </div>
                   </div>
                 </div>
                 <nav className="p-2 flex-1 overflow-y-auto relative z-10">
@@ -305,9 +259,10 @@ export default function Navigation({
                                 "px-4 py-4 rounded-lg",
                                 "transition-all duration-300 touch-manipulation",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/60",
+                                "active:scale-95",
                                 isActive
-                                  ? "text-white bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-400/30"
-                                  : "text-gray-300 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-blue-500/10 hover:text-white"
+                                  ? "text-white bg-gradient-to-r from-violet-500/20 to-cyan-500/20 border border-violet-400/30"
+                                  : "text-gray-300 hover:bg-gradient-to-r hover:from-violet-500/10 hover:to-cyan-500/10 hover:text-white"
                               )}
                               aria-current={isActive ? "page" : undefined}
                               aria-label={`Go to ${item.label}`}
@@ -329,7 +284,7 @@ export default function Navigation({
 
       {/* Glowing Bottom Border - Optimized */}
       <motion.div
-        className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent will-change-transform"
+        className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-violet-500 to-transparent will-change-transform"
         animate={{
           opacity: [0.3, 0.6, 0.3],
         }}
@@ -339,6 +294,6 @@ export default function Navigation({
           ease: "easeInOut"
         }}
       />
-    </motion.header>
+    </motion.header >
   );
 }
