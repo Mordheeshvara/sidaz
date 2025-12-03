@@ -1,8 +1,0 @@
-{
-  "buildCommand": "npm run vercel-build",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "env": {
-    "NEXT_DISABLE_LIGHTNINGCSS": "1"
-  }
-}
