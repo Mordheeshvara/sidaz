@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
         unoptimized: true,
@@ -15,14 +14,10 @@ const nextConfig = {
             },
         ],
     },
-    experimental: {
-        css: {
-            lightningcss: false
-        }
+    env: {
+        NEXT_DISABLE_LIGHTNINGCSS: '1'
     },
-    eslint: {
-        ignoreDuringBuilds: false,
-    },
+    // eslint config removed (not needed)
 };
 
 export default nextConfig;
