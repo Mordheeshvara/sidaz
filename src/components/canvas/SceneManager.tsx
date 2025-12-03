@@ -30,7 +30,7 @@ function QuantumCore() {
         <group>
             {/* Liquid Metal Core */}
             <mesh ref={meshRef} scale={1.5}>
-                <sphereGeometry args={[1, 48, 48]} />
+                <sphereGeometry args={[1, 24, 24]} />
                 <MeshDistortMaterial
                     color="#8b5cf6"
                     emissive="#5b21b6"
@@ -86,8 +86,8 @@ function InfinityLoop() {
                         roughness={0}
                         emissive="#4c1d95"
                         emissiveIntensity={0.5}
-                        resolution={512}
-                        samples={6}
+                        resolution={256}
+                        samples={4}
                     />
                 </mesh>
             </Float>
@@ -113,8 +113,8 @@ function FloatingShapes() {
                         temporalDistortion={0.1}
                         color="#a78bfa"
                         roughness={0}
-                        resolution={512}
-                        samples={6}
+                        resolution={256}
+                        samples={4}
                     />
                 </mesh>
 
@@ -200,8 +200,8 @@ function GlassShards() {
                             temporalDistortion={0.1}
                             color="#ffffff"
                             roughness={0}
-                            resolution={256}
-                            samples={4}
+                            resolution={128}
+                            samples={2}
                         />
                     </mesh>
                 </Float>
@@ -238,16 +238,16 @@ export default function SceneManager() {
         <group>
             <CinematicCamera />
 
-            <EffectComposer enableNormalPass={false}>
+            {/* <EffectComposer enableNormalPass={false}>
                 <Bloom luminanceThreshold={0.5} mipmapBlur intensity={1.0} radius={0.4} />
-            </EffectComposer>
+            </EffectComposer> */}
 
             <ambientLight intensity={0.2} />
             <pointLight position={[10, 10, 10]} intensity={1.5} color="#ffffff" />
             <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
 
             {/* Enhanced Environment - Optimized counts */}
-            <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
+            <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade speed={1} />
             <Sparkles count={200} scale={20} size={2} speed={0.4} opacity={0.5} color="#ffffff" />
             <AuroraBackground />
 

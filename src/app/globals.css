@@ -314,7 +314,7 @@
   }
 
   .glass-card {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
   }
 
   .text-gradient {
@@ -349,8 +349,8 @@
   /* Ultra Premium Utilities */
   .glass-premium {
     background-color: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
   }

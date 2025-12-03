@@ -1,18 +1,34 @@
 "use client";
 
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import HeroSection from "@/components/HeroSection";
 import Navigation from "@/components/Navigation";
-import ServicesSection from "@/components/ServicesSection";
-import AboutSection from "@/components/AboutSection";
-import PortfolioSection from "@/components/PortfolioSection";
-import TeamSection from "@/components/TeamSection";
-import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
 import BackgroundEffects from "@/components/BackgroundEffects";
+
+// Lazy load below-the-fold sections
+const ServicesSection = dynamic(() => import("@/components/ServicesSection"), { ssr: true });
+const AboutSection = dynamic(() => import("@/components/AboutSection"), { ssr: true });
+const PortfolioSection = dynamic(() => import("@/components/PortfolioSection"), { ssr: true });
+const TeamSection = dynamic(() => import("@/components/TeamSection"), { ssr: true });
+const ContactSection = dynamic(() => import("@/components/ContactSection"), { ssr: true });
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: true });
+
+// Loading skeleton for smooth initial paint
+function LoadingSkeleton() {
+  return (
+    <div className="fixed inset-0 bg-slate-950 flex items-center justify-center z-50">
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-violet-300 text-sm animate-pulse">Loading SIDAZ...</p>
+      </div>
+    </div>
+  );
+}
 
 export default function HomePage() {
   return (
-    <>
+    <Suspense fallback={<LoadingSkeleton />}>
       {/* 2D Background Effects */}
       <BackgroundEffects />
 
@@ -50,6 +66,6 @@ export default function HomePage() {
         {/* Footer */}
         <Footer />
       </main>
-    </>
+    </Suspense>
   );
 }

@@ -179,7 +179,7 @@ export default function Navigation({
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={clsx(
         "fixed top-0 inset-x-0 z-50",
-        "backdrop-blur-md supports-[backdrop-filter]:bg-black/20 bg-black/50",
+        "backdrop-blur-sm supports-[backdrop-filter]:bg-black/30 bg-black/60",
         "border-b border-white/5 transition-all duration-300",
         isServicesVisible ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100",
         className || ""

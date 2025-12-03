@@ -6,13 +6,13 @@ import { useRef } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 
 const textVariant = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
     transition: {
-      delay: i * 0.05,
-      duration: 0.8,
+      delay: i * 0.02,
+      duration: 0.4,
       ease: [0.22, 1, 0.36, 1] as any,
     },
   }),
@@ -45,9 +45,9 @@ export default function HeroSection() {
       >
         {/* Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8"
         >
           <Sparkles className="w-4 h-4 text-violet-400" />
@@ -90,9 +90,9 @@ export default function HeroSection() {
 
         {/* Subheading */}
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
           className="text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto mb-12 leading-relaxed"
         >
           World-class software solutions powered by cutting-edge AI,
@@ -101,9 +101,9 @@ export default function HeroSection() {
 
         {/* CTA Buttons with Magnetic Effect */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <MagneticButton>

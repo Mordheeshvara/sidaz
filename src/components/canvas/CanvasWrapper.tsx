@@ -10,25 +10,32 @@ import { useModal } from "@/context/ModalContext";
 export default function CanvasWrapper({ children }: { children: React.ReactNode }) {
     const [dpr, setDpr] = useState(0.75);
     const [hasWebGL, setHasWebGL] = useState(true);
+    const [isMounted, setIsMounted] = useState(false);
     const { isModalOpen, isServicesInView, isPortfolioInView } = useModal();
 
-    // Check WebGL support
+    // Check WebGL support with deferred loading to prioritize UI
     useEffect(() => {
-        try {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            if (!gl) {
+        const timer = setTimeout(() => {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) {
+                    setHasWebGL(false);
+                }
+                setIsMounted(true);
+            } catch (e) {
                 setHasWebGL(false);
+                setIsMounted(true);
             }
-        } catch (e) {
-            setHasWebGL(false);
-        }
+        }, 1000); // Increased to 1000ms to ensure UI paints first without lag
+
+        return () => clearTimeout(timer);
     }, []);
 
     return (
         <div className="relative w-full min-h-screen">
             {/* The Global 3D Canvas - ULTRA OPTIMIZED with Fallback */}
-            {hasWebGL ? (
+            {hasWebGL && isMounted ? (
                 <div className="fixed inset-0 z-0 pointer-events-none">
                     <Canvas
                         shadows={false}
