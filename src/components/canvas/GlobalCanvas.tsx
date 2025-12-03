@@ -26,14 +26,7 @@ export default function GlobalCanvas() {
                 performance={{ min: 0.5 }}
             >
                 <Suspense fallback={null}>
-                    <ScrollControls pages={6} damping={0.2}>
-                        <SceneManager />
-                    </ScrollControls>
-
-
-
-
-
+                    <SceneManager />
                     <Preload all />
                 </Suspense>
             </Canvas>

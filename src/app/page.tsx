@@ -16,7 +16,7 @@ export default function HomePage() {
       {/* 2D Background Effects */}
       <BackgroundEffects />
 
-      <main className="min-h-screen bg-slate-950 relative z-10 contain-section">
+      <main className="min-h-screen bg-transparent relative z-10 contain-section">
         <Navigation />
 
         {/* Hero Section */}

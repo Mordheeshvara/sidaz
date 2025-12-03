@@ -1,11 +1,10 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { ScrollControls, Preload, PerformanceMonitor } from "@react-three/drei";
+import { Preload, PerformanceMonitor } from "@react-three/drei";
 import { Suspense, useState, useEffect } from "react";
 import * as THREE from "three";
-import ScrollScene from "./ScrollScene";
-import Scene3DContent from "./Scene3DContent";
+import SceneManager from "./SceneManager";
 import { useModal } from "@/context/ModalContext";
 
 export default function CanvasWrapper({ children }: { children: React.ReactNode }) {
@@ -52,10 +51,8 @@ export default function CanvasWrapper({ children }: { children: React.ReactNode 
                         }}
                     >
                         <Suspense fallback={null}>
-                            <ScrollControls pages={6} damping={0.25} distance={1}>
-                                <ScrollScene />
-                                <Scene3DContent />
-                            </ScrollControls>
+                            {/* Use SceneManager which contains CinematicCamera and section content */}
+                            <SceneManager />
 
                             <Preload all />
 

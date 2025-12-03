@@ -62,15 +62,15 @@ export default function HeroScene() {
                     <bufferGeometry>
                         <bufferAttribute
                             attach="attributes-position"
-                            args={[particlesPosition.positions, 3]}
+                            args={[particlesPosition.positions, 3] as any}
                         />
                         <bufferAttribute
                             attach="attributes-color"
-                            args={[particlesPosition.colors, 3]}
+                            args={[particlesPosition.colors, 3] as any}
                         />
                         <bufferAttribute
                             attach="attributes-size"
-                            args={[particlesPosition.sizes, 1]}
+                            args={[particlesPosition.sizes, 1] as any}
                         />
                     </bufferGeometry>
                     <pointsMaterial

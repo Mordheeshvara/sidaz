@@ -33,10 +33,13 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative w-full overflow-hidden bg-black border-t border-white/5 pt-20 pb-10">
+    <footer className="relative w-full overflow-hidden bg-transparent pt-20 pb-10">
+      {/* Glowing Top Border */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
+
       {/* Subtle Background Glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-violet-500/5 rounded-full blur-[120px] opacity-50" />
+        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-violet-500/10 rounded-full blur-[120px] opacity-30" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -73,8 +76,8 @@ export default function Footer() {
                 <motion.a
                   key={index}
                   href={social.href}
-                  whileHover={{ y: -3, color: social.color }}
-                  className={`w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-400 transition-colors hover:bg-white/5 ${social.className}`}
+                  whileHover={{ y: -3, color: social.color, boxShadow: `0 0 20px ${social.color}40` }}
+                  className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 transition-all hover:bg-white/10 ${social.className}`}
                 >
                   <social.icon className="w-4 h-4" />
                 </motion.a>

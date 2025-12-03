@@ -110,7 +110,10 @@ function TeamCard({ member, onClick }: { member: TeamMember; onClick: () => void
       whileHover={{ y: -5 }}
       className="group relative cursor-pointer"
     >
-      <div className="relative overflow-hidden rounded-2xl bg-zinc-900/50 border border-white/5 transition-all duration-500 hover:border-white/20 hover:bg-zinc-900/80">
+      <div className="relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-500 hover:border-violet-500/50 hover:shadow-[0_0_30px_rgba(139,92,246,0.2)] hover:bg-white/10">
+        {/* Tech Corner Accents */}
+        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/20 rounded-tl-2xl group-hover:border-violet-500 transition-colors" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/20 rounded-br-2xl group-hover:border-violet-500 transition-colors" />
         {/* Image Container */}
         <div className="relative aspect-square overflow-hidden">
           <div className="relative w-full h-full">
@@ -171,7 +174,7 @@ export default function TeamSection() {
   return (
     <section
       id="team"
-      className="relative w-full min-h-screen flex items-center justify-center py-32 overflow-hidden bg-black"
+      className="relative w-full min-h-screen flex items-center justify-center py-32 overflow-hidden bg-transparent"
     >
       {/* 3D Background */}
       <div className="absolute inset-0 pointer-events-none opacity-30">
