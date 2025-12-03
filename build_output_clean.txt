@@ -1,0 +1,83 @@
+﻿
+> app@0.1.0 build
+> next build
+
+   Γû▓ Next.js 15.5.3
+
+   Creating an optimized production build ...
+node.exe : Failed to 
+compile.
+At C:\Program Files\n
+odejs\npm.ps1:29 
+char:3
++   & $NODE_EXE 
+$NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Failed    
+ to compile.:Stri    
+ng) [], RemoteEx    
+ception
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+
+./src/components/Smoo
+thScroll.tsx
+Module not found: 
+Can't resolve 'lenis'
+
+https://nextjs.org/do
+cs/messages/module-no
+t-found
+
+./src/components/Team
+Section.tsx
+Module not found: 
+Can't resolve 
+'@react-three/drei'
+
+https://nextjs.org/do
+cs/messages/module-no
+t-found
+
+Import trace for 
+requested module:
+./src/app/page.tsx
+
+./src/components/canv
+as/CanvasWrapper.tsx
+Module not found: 
+Can't resolve 
+'@react-three/fiber'
+
+https://nextjs.org/do
+cs/messages/module-no
+t-found
+
+./src/components/canv
+as/CanvasWrapper.tsx
+Module not found: 
+Can't resolve 
+'@react-three/drei'
+
+https://nextjs.org/do
+cs/messages/module-no
+t-found
+
+./src/components/canv
+as/CanvasWrapper.tsx
+Module not found: 
+Can't resolve 'three'
+
+https://nextjs.org/do
+cs/messages/module-no
+t-found
+
+
+> Build failed 
+because of webpack 
+errors
