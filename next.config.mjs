@@ -14,9 +14,6 @@ const nextConfig = {
             },
         ],
     },
-    env: {
-        NEXT_DISABLE_LIGHTNINGCSS: '1'
-    },
     // eslint config removed (not needed)
 };
 
