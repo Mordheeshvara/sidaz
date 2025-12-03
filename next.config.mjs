@@ -15,8 +15,10 @@ const nextConfig = {
             },
         ],
     },
-    typescript: {
-        ignoreBuildErrors: false,
+    experimental: {
+        css: {
+            lightningcss: false
+        }
     },
     eslint: {
         ignoreDuringBuilds: false,
