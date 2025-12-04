@@ -6,15 +6,6 @@ import Image from "next/image";
 import { useRef } from "react";
 
 export default function AboutSection() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
   const values = [
     {
       icon: Rocket,
@@ -47,21 +38,17 @@ export default function AboutSection() {
 
   return (
     <section
-      ref={ref}
       id="about"
       className="relative w-full min-h-screen flex items-center justify-center py-32 overflow-hidden"
     >
       <div className="container mx-auto px-4 z-10">
         {/* Header */}
-        <motion.div
-          style={{ opacity }}
-          className="text-center max-w-4xl mx-auto mb-20"
-        >
+        <div className="text-center max-w-4xl mx-auto mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-6"
           >
             <span className="text-sm font-medium text-violet-400">About Us</span>
           </motion.div>
@@ -91,7 +78,7 @@ export default function AboutSection() {
             dedicated to building exceptional digital experiences. Founded in 2024,
             we've rapidly grown into a trusted partner for businesses worldwide.
           </motion.p>
-        </motion.div>
+        </div>
 
         {/* Founder Section */}
         <motion.div
@@ -101,7 +88,7 @@ export default function AboutSection() {
           transition={{ delay: 0.3 }}
           className="max-w-5xl mx-auto mb-20"
         >
-          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 backdrop-blur-md overflow-hidden group">
+          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 backdrop-blur-sm overflow-hidden group">
             {/* Glow effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-violet-500/0 to-fuchsia-500/0 group-hover:from-violet-500/10 group-hover:to-fuchsia-500/10 transition-all duration-500" />
 
@@ -146,7 +133,7 @@ export default function AboutSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
-              className="group relative p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 hover:border-violet-500/50 transition-all duration-500"
+              className="group relative p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-violet-500/50 transition-all duration-500"
             >
               {/* Icon */}
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -175,7 +162,7 @@ export default function AboutSection() {
           transition={{ delay: 0.4 }}
           className="max-w-4xl mx-auto"
         >
-          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 backdrop-blur-md overflow-hidden">
+          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 backdrop-blur-sm overflow-hidden">
             <h3 className="text-3xl font-bold text-white mb-12 text-center">
               Our Journey
             </h3>

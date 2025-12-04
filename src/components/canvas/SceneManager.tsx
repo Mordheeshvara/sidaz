@@ -72,7 +72,7 @@ function InfinityLoop() {
         <group>
             <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
                 <mesh ref={ref}>
-                    <torusKnotGeometry args={[1.5, 0.4, 80, 16]} />
+                    <torusKnotGeometry args={[1.5, 0.4, 64, 8]} />
                     <MeshTransmissionMaterial
                         backside
                         backsideThickness={0.5}
