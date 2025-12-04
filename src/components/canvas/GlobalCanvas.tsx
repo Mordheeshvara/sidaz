@@ -18,7 +18,7 @@ export default function GlobalCanvas() {
                     stencil: false,
                     depth: true
                 }}
-                dpr={[1, 1.5]}
+                dpr={[1, 1]}
                 camera={{ position: [0, 0, 10], fov: 45 }}
                 eventSource={typeof document !== 'undefined' ? (document.getElementById('root') || document.body) : undefined}
                 eventPrefix="client"

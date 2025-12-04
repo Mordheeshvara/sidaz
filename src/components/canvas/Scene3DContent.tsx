@@ -88,15 +88,42 @@ function Scene3DContent() {
         };
     }, []);
 
+    const { viewport } = useThree();
+    const isMobile = viewport.width < 768; // Simple breakpoint check based on viewport units (approx)
+
     // ONLY 3 SHAPES - Maximum performance
     const shapes = useMemo(() => {
+        // Responsive positioning
+        const scaleFactor = viewport.width < 10 ? 0.6 : 1; // Scale down on small screens
+
         return [
             // Just 3 wireframe shapes - minimal rendering
-            { geometry: geometries.icosahedron, position: [-18, 8, -65] as [number, number, number], color: '#663399', wireframe: true, speed: 0.5, scale: 1.0 },
-            { geometry: geometries.octahedron, position: [18, 10, -70] as [number, number, number], color: '#00FFFF', wireframe: true, speed: 0.6, scale: 0.9 },
-            { geometry: geometries.torus, position: [0, -15, -75] as [number, number, number], color: '#C9A84B', wireframe: true, speed: 0.4, scale: 0.85 },
+            {
+                geometry: geometries.icosahedron,
+                position: [viewport.width < 10 ? -5 : -18, viewport.width < 10 ? 4 : 8, -65] as [number, number, number],
+                color: '#663399',
+                wireframe: true,
+                speed: 0.5,
+                scale: 1.0 * scaleFactor
+            },
+            {
+                geometry: geometries.octahedron,
+                position: [viewport.width < 10 ? 5 : 18, viewport.width < 10 ? 5 : 10, -70] as [number, number, number],
+                color: '#00FFFF',
+                wireframe: true,
+                speed: 0.6,
+                scale: 0.9 * scaleFactor
+            },
+            {
+                geometry: geometries.torus,
+                position: [0, viewport.width < 10 ? -8 : -15, -75] as [number, number, number],
+                color: '#C9A84B',
+                wireframe: true,
+                speed: 0.4,
+                scale: 0.85 * scaleFactor
+            },
         ];
-    }, [geometries]);
+    }, [geometries, viewport.width]);
 
     return (
         <>

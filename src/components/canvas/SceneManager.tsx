@@ -247,9 +247,7 @@ export default function SceneManager() {
             <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
 
             {/* Enhanced Environment - Optimized counts */}
-            <Stars radius={100} depth={50} count={300} factor={4} saturation={0} fade speed={1} />
-            <Sparkles count={100} scale={20} size={2} speed={0.4} opacity={0.5} color="#ffffff" />
-            <AuroraBackground />
+            <Stars radius={100} depth={50} count={200} factor={4} saturation={0} fade speed={1} />
 
             {/* --- HERO SECTION: Quantum Core --- */}
             <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
