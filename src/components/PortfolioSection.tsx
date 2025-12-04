@@ -25,7 +25,7 @@ const projects: Project[] = [
     title: "Study Sync",
     category: "Mobile",
     description: "Comprehensive learning management ecosystem streamlining academic operations with real-time Firebase sync.",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1920&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
     tags: ["Flutter", "Firebase", "Real-time"],
     link: "#",
     featured: true
@@ -35,7 +35,7 @@ const projects: Project[] = [
     title: "HR Portal",
     category: "Web",
     description: "Intelligent recruitment platform with automated Kanban tracking and resume parsing.",
-    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=1920&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=1200&auto=format&fit=crop",
     tags: ["Next.js", "MongoDB", "AI"],
     link: "#"
   },
@@ -44,7 +44,7 @@ const projects: Project[] = [
     title: "Blood Link",
     category: "Mobile",
     description: "Life-saving network connecting donors with hospitals using geolocation.",
-    image: "https://images.unsplash.com/photo-1615461066159-fea0960485d5?q=80&w=1920&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1615461066159-fea0960485d5?q=80&w=1200&auto=format&fit=crop",
     tags: ["Flutter", "Google Maps", "Firebase"],
     link: "#"
   },
@@ -53,7 +53,7 @@ const projects: Project[] = [
     title: "MineSafe IoT",
     category: "Mobile",
     description: "IoT-enabled tire pressure monitoring for mining fleets with predictive alerts.",
-    image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1920&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1200&auto=format&fit=crop",
     tags: ["Flutter", "IoT", "Bluetooth LE"],
     link: "#"
   },
@@ -154,7 +154,7 @@ export default function PortfolioSection() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, index) => (
             <motion.div
               layoutId={`project-${project.id}`}
               key={project.id}
@@ -171,6 +171,9 @@ export default function PortfolioSection() {
                   src={project.image}
                   alt={project.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority={index < 4}
+                  quality={85}
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-80" />
@@ -242,6 +245,9 @@ export default function PortfolioSection() {
                   src={selectedProject.image}
                   alt={selectedProject.title}
                   fill
+                  priority
+                  quality={90}
+                  sizes="(max-width: 768px) 100vw, 80vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />

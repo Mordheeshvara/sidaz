@@ -99,7 +99,7 @@ const teamMembers: TeamMember[] = [
   }
 ];
 
-function TeamCard({ member, onClick }: { member: TeamMember; onClick: () => void }) {
+function TeamCard({ member, index, onClick }: { member: TeamMember; index: number; onClick: () => void }) {
   return (
     <motion.div
       onClick={onClick}
@@ -121,6 +121,9 @@ function TeamCard({ member, onClick }: { member: TeamMember; onClick: () => void
               src={member.imageUrl}
               alt={member.name}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              priority={index < 4}
+              quality={85}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>
@@ -226,6 +229,7 @@ export default function TeamSection() {
             <TeamCard
               key={member.id}
               member={member}
+              index={index}
               onClick={() => handleOpenModal(member)}
             />
           ))}
@@ -270,6 +274,9 @@ export default function TeamSection() {
                     src={selectedMember.imageUrl}
                     alt={selectedMember.name}
                     fill
+                    priority
+                    quality={90}
+                    sizes="(max-width: 768px) 100vw, 40vw"
                     className="object-cover"
                   />
                 </div>
