@@ -125,31 +125,6 @@ export default function ContactSection() {
 
           </motion.div>
 
-          {/* Map & Form Container */}
-          <div className="space-y-8">
-            {/* Google Map */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="w-full h-64 rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative group"
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.276388488666!2d79.84074827574886!3d11.95536423634458!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5363004655653b%3A0x6335359223708e1e!2sSidaZ%20Technologies!5e0!3m2!1sen!2sin!4v1709664000000!5m2!1sen!2sin"
-                width="100%"
-                height="100%"
-                style={{ border: 0, filter: "grayscale(100%) invert(90%) contrast(85%)" }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="group-hover:filter-none transition-all duration-500"
-              />
-              {/* Overlay for better integration */}
-              <div className="absolute inset-0 pointer-events-none border border-white/10 rounded-2xl ring-1 ring-white/5" />
-            </motion.div>
-          </div>
-
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}

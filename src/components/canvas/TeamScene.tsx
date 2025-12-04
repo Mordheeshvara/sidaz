@@ -9,9 +9,8 @@ export default function TeamScene() {
     const groupRef = useRef<THREE.Group>(null);
     const particlesRef = useRef<THREE.Points>(null);
 
-    // OPTIMIZED: Only 400 particles for smooth performance
     const particles = useMemo(() => {
-        const count = 400;
+        const count = 200;
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
 

@@ -86,8 +86,8 @@ function InfinityLoop() {
                         roughness={0}
                         emissive="#4c1d95"
                         emissiveIntensity={0.5}
-                        resolution={128}
-                        samples={2}
+                        resolution={64}
+                        samples={1}
                     />
                 </mesh>
             </Float>
@@ -113,8 +113,8 @@ function FloatingShapes() {
                         temporalDistortion={0.1}
                         color="#a78bfa"
                         roughness={0}
-                        resolution={128}
-                        samples={2}
+                        resolution={64}
+                        samples={1}
                     />
                 </mesh>
 
@@ -200,8 +200,8 @@ function GlassShards() {
                             temporalDistortion={0.1}
                             color="#ffffff"
                             roughness={0}
-                            resolution={64}
-                            samples={2}
+                            resolution={32}
+                            samples={1}
                         />
                     </mesh>
                 </Float>
@@ -222,7 +222,7 @@ function AuroraBackground() {
 
     return (
         <mesh ref={meshRef} position={[0, 0, -20]} scale={50}>
-            <planeGeometry args={[1, 1, 32, 32]} />
+            <planeGeometry args={[1, 1, 16, 16]} />
             <MeshDistortMaterial
                 color="#1e1b4b"
                 speed={2}
@@ -247,8 +247,8 @@ export default function SceneManager() {
             <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
 
             {/* Enhanced Environment - Optimized counts */}
-            <Stars radius={100} depth={50} count={500} factor={4} saturation={0} fade speed={1} />
-            <Sparkles count={200} scale={20} size={2} speed={0.4} opacity={0.5} color="#ffffff" />
+            <Stars radius={100} depth={50} count={300} factor={4} saturation={0} fade speed={1} />
+            <Sparkles count={100} scale={20} size={2} speed={0.4} opacity={0.5} color="#ffffff" />
             <AuroraBackground />
 
             {/* --- HERO SECTION: Quantum Core --- */}
