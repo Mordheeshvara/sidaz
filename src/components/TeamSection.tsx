@@ -119,7 +119,7 @@ function TeamCard({ member, index, onClick }: { member: TeamMember; index: numbe
       whileHover={{ y: -5 }}
       className="group relative cursor-pointer"
     >
-      <div className="relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-500 hover:border-violet-500/50 hover:shadow-[0_0_30px_rgba(139,92,246,0.2)] hover:bg-white/10">
+      <div className="relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 transition-all duration-500 hover:border-violet-500/50 hover:bg-white/10 will-change-transform">
         {/* Tech Corner Accents */}
         <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/20 rounded-tl-2xl group-hover:border-violet-500 transition-colors" />
         <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/20 rounded-br-2xl group-hover:border-violet-500 transition-colors" />
@@ -130,17 +130,17 @@ function TeamCard({ member, index, onClick }: { member: TeamMember; index: numbe
               src={member.image}
               alt={member.name}
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 768px) 100vw, 50vw"
               placeholder="blur"
               priority={index < 4}
-              quality={85}
+              quality={80}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>
 
           {/* Founder Badge */}
           {member.role === "Founder" && (
-            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 z-10">
+            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/10 border border-white/20 z-10">
               <span className="text-[10px] font-bold text-white uppercase tracking-wider">Founder</span>
             </div>
           )}
@@ -272,7 +272,7 @@ export default function TeamSection() {
             >
               <button
                 onClick={handleCloseModal}
-                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white backdrop-blur-md transition-colors border border-white/10"
+                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors border border-white/10"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -286,8 +286,8 @@ export default function TeamSection() {
                     fill
                     priority
                     placeholder="blur"
-                    quality={90}
-                    sizes="(max-width: 768px) 100vw, 40vw"
+                    quality={80}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                   />
                 </div>
