@@ -1,17 +1,26 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Mail, Linkedin, Instagram, X, ArrowUpRight } from "lucide-react";
 import { View } from "@react-three/drei";
 import TeamScene from "@/components/canvas/TeamScene";
 import { useState } from "react";
 
+// Static Imports for Optimization
+import founderImg from "../../public/images/team/founder .jpeg";
+import shrutiImg from "../../public/images/team/Shruti.jpeg";
+import arjunImg from "../../public/images/team/arjun.png";
+import mothyImg from "../../public/images/team/mothy.png";
+import suriyaImg from "../../public/images/team/suriya.png";
+import rakaImg from "../../public/images/team/raka.png";
+import dhineshImg from "../../public/images/team/dhinesh.png";
+
 type TeamMember = {
   id: string;
   name: string;
   role: string;
-  imageUrl: string;
+  image: StaticImageData;
   email: string;
   linkedin?: string;
   instagram?: string;
@@ -24,7 +33,7 @@ const teamMembers: TeamMember[] = [
     id: "1",
     name: "Sarathy",
     role: "Founder",
-    imageUrl: "/images/team/founder .jpeg",
+    image: founderImg,
     email: "sarathy@sidaz.com",
     linkedin: "https://www.linkedin.com/in/sarathyvaittianadasammy/",
     instagram: "https://www.instagram.com/parama_from_petit/?hl=en",
@@ -35,7 +44,7 @@ const teamMembers: TeamMember[] = [
     id: "2",
     name: "Shruti",
     role: "Chief Executive Officer",
-    imageUrl: "/images/team/Shruti.jpeg",
+    image: shrutiImg,
     email: "shrutithamizhselvan@gmail.com",
     linkedin: "https://www.linkedin.com/in/shruti-vaittinadassamy-33b0261b8/",
     instagram: "https://www.instagram.com/_shrutithamizh_07/?hl=en",
@@ -46,7 +55,7 @@ const teamMembers: TeamMember[] = [
     id: "3",
     name: "Arjun",
     role: "Chief Technology Officer",
-    imageUrl: "/images/team/arjun.png",
+    image: arjunImg,
     email: "arjunfree256@gmail.com",
     linkedin: "https://www.linkedin.com/in/arjun19/",
     instagram: "https://www.instagram.com/arj._.uun/?hl=en",
@@ -57,7 +66,7 @@ const teamMembers: TeamMember[] = [
     id: "4",
     name: "Mordheeshvara",
     role: "Chief Marketing Officer",
-    imageUrl: "/images/team/mothy.png",
+    image: mothyImg,
     email: "mordheeshvarab@gmail.com",
     linkedin: "https://www.linkedin.com/in/mordheeshvara/",
     instagram: "https://www.instagram.com/mordheesh/?hl=en",
@@ -68,7 +77,7 @@ const teamMembers: TeamMember[] = [
     id: "5",
     name: "Pratheeb",
     role: "Chief Financial Officer",
-    imageUrl: "/images/team/suriya.png",
+    image: suriyaImg,
     email: "pratheebsuriya786@gmail.com",
     linkedin: "https://www.linkedin.com/in/pratheeb-e-4882bb298/",
     instagram: "https://www.instagram.com/_pratheeb_012_/?hl=en",
@@ -79,7 +88,7 @@ const teamMembers: TeamMember[] = [
     id: "6",
     name: "Ravikanth",
     role: "Chief Blockchain Developer",
-    imageUrl: "/images/team/raka.png",
+    image: rakaImg,
     email: "ravikanthsankaran@gmail.com",
     linkedin: "https://www.linkedin.com/in/ravikanth-s/",
     instagram: "https://www.instagram.com/__its__r____k___/?hl=en",
@@ -90,7 +99,7 @@ const teamMembers: TeamMember[] = [
     id: "7",
     name: "Dhinesh",
     role: "Chief Operating Officer",
-    imageUrl: "/images/team/dhinesh.png",
+    image: dhineshImg,
     email: "dhineshsidaz@gmail.com",
     linkedin: "https://www.linkedin.com/in/dhineshkumar-gl/",
     instagram: "https://www.instagram.com/itz_dhinesh_05/?hl=en",
@@ -118,10 +127,11 @@ function TeamCard({ member, index, onClick }: { member: TeamMember; index: numbe
         <div className="relative aspect-square overflow-hidden">
           <div className="relative w-full h-full">
             <Image
-              src={member.imageUrl}
+              src={member.image}
               alt={member.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              placeholder="blur"
               priority={index < 4}
               quality={85}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -271,10 +281,11 @@ export default function TeamSection() {
               <div className="relative w-full md:w-2/5 h-64 md:h-auto shrink-0">
                 <div className="relative w-full h-full">
                   <Image
-                    src={selectedMember.imageUrl}
+                    src={selectedMember.image}
                     alt={selectedMember.name}
                     fill
                     priority
+                    placeholder="blur"
                     quality={90}
                     sizes="(max-width: 768px) 100vw, 40vw"
                     className="object-cover"
